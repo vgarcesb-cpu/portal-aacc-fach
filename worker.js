@@ -1,17 +1,14 @@
 /**
- * worker.js - PORTAL A/C FACH
+ * worker.js - PORTAL A/C FACH v3.0
  * API REST con Cloudflare Workers + D1
- * Gestión de Equipos de Aire Acondicionado
+ * Seguridad: Cloudflare Access (sin JWT interno)
  * Autor: Victor Manuel Garces Borje (totis.cl)
  */
 
-// ============================================================
-// CORS y utilidades
-// ============================================================
 const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': 'https://aacc.totis.cl',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Headers': 'Content-Type',
   'Content-Type': 'application/json',
 };
 
@@ -24,38 +21,14 @@ function errorResponse(message, status = 400) {
 }
 
 // ============================================================
-// JWT simple (sin librería externa)
+// VALIDACIÓN CLOUDFLARE ACCESS
+// Cloudflare inyecta este header en requests autenticados
+// Si no viene, la request no pasó por Access → bloquear
 // ============================================================
-async function crearToken(payload, secret) {
-  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-  const body = btoa(JSON.stringify({ ...payload, exp: Date.now() + 86400000 }));
-  const data = `${header}.${body}`;
-  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(data));
-  const signature = btoa(String.fromCharCode(...new Uint8Array(sig)));
-  return `${data}.${signature}`;
-}
-
-async function verificarToken(token, secret) {
-  try {
-    const [header, body, signature] = token.split('.');
-    const data = `${header}.${body}`;
-    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret),
-      { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']);
-    const sigBytes = Uint8Array.from(atob(signature), c => c.charCodeAt(0));
-    const valid = await crypto.subtle.verify('HMAC', key, sigBytes, new TextEncoder().encode(data));
-    if (!valid) return null;
-    const payload = JSON.parse(atob(body));
-    if (payload.exp < Date.now()) return null;
-    return payload;
-  } catch { return null; }
-}
-
-async function autenticar(request, env) {
-  const auth = request.headers.get('Authorization');
-  if (!auth || !auth.startsWith('Bearer ')) return null;
-  return await verificarToken(auth.slice(7), env.JWT_SECRET || 'aacc_fach_secret_2024');
+function validarAccess(request) {
+  const userEmail = request.headers.get('CF-Access-Authenticated-User-Email');
+  if (!userEmail) return false;
+  return true;
 }
 
 // ============================================================
@@ -69,33 +42,30 @@ export default {
 
     if (method === 'OPTIONS') return new Response(null, { headers: CORS_HEADERS });
 
-    // ---- RUTAS PÚBLICAS ----
-    if (path === '/api/login' && method === 'POST') return handleLogin(request, env);
-    if (path === '/api/health' && method === 'GET') return jsonResponse({ status: 'ok', app: 'Portal A/C FACH', version: '2.0.0' });
+    // Health check público (para probar conexión)
+    if (path === '/api/health' && method === 'GET') {
+      return jsonResponse({ status: 'ok', app: 'Portal A/C FACH', version: '3.0.0' });
+    }
 
-    // ---- AUTENTICACIÓN ----
-    const usuario = await autenticar(request, env);
-    if (!usuario) return errorResponse('No autorizado', 401);
-
-    // ---- USUARIOS ----
-    if (path === '/api/usuarios' && method === 'GET') return getUsuarios(env, usuario);
-    if (path === '/api/usuarios' && method === 'POST') return crearUsuario(request, env, usuario);
-    if (path.match(/^\/api\/usuarios\/\d+$/) && method === 'PUT') return actualizarUsuario(request, env, usuario, path);
+    // Validar que el request viene autenticado por Cloudflare Access
+    if (!validarAccess(request)) {
+      return errorResponse('Acceso no autorizado. Use https://aacc.totis.cl', 403);
+    }
 
     // ---- DASHBOARD ----
     if (path === '/api/dashboard' && method === 'GET') return getDashboard(env);
 
     // ---- EQUIPOS ----
     if (path === '/api/equipos' && method === 'GET') return getEquipos(env, url);
-    if (path === '/api/equipos' && method === 'POST') return crearEquipo(request, env, usuario);
+    if (path === '/api/equipos' && method === 'POST') return crearEquipo(request, env);
     if (path.match(/^\/api\/equipos\/\d+$/) && method === 'GET') return getEquipo(env, path);
     if (path.match(/^\/api\/equipos\/\d+$/) && method === 'PUT') return actualizarEquipo(request, env, path);
-    if (path.match(/^\/api\/equipos\/\d+$/) && method === 'DELETE') return eliminarEquipo(env, usuario, path);
+    if (path.match(/^\/api\/equipos\/\d+$/) && method === 'DELETE') return eliminarEquipo(env, path);
 
     // ---- BITÁCORA ----
     if (path.match(/^\/api\/equipos\/\d+\/bitacora$/) && method === 'GET') return getBitacora(env, path, url);
     if (path === '/api/bitacora' && method === 'GET') return getBitacoraGeneral(env, url);
-    if (path === '/api/bitacora' && method === 'POST') return crearBitacora(request, env, usuario);
+    if (path === '/api/bitacora' && method === 'POST') return crearBitacora(request, env);
     if (path.match(/^\/api\/bitacora\/\d+$/) && method === 'PUT') return actualizarBitacora(request, env, path);
     if (path.match(/^\/api\/bitacora\/\d+$/) && method === 'DELETE') return eliminarBitacora(env, path);
 
@@ -104,71 +74,20 @@ export default {
 
     // ---- ALERTAS ----
     if (path === '/api/alertas' && method === 'GET') return getAlertas(env, url);
-    if (path.match(/^\/api\/alertas\/\d+\/resolver$/) && method === 'PUT') return resolverAlerta(request, env, usuario, path);
+    if (path.match(/^\/api\/alertas\/\d+\/resolver$/) && method === 'PUT') return resolverAlerta(env, path);
 
     // ---- INSPECCIONES ----
     if (path.match(/^\/api\/equipos\/\d+\/inspecciones$/) && method === 'GET') return getInspecciones(env, path);
-    if (path === '/api/inspecciones' && method === 'POST') return crearInspeccion(request, env, usuario);
+    if (path === '/api/inspecciones' && method === 'POST') return crearInspeccion(request, env);
     if (path.match(/^\/api\/inspecciones\/\d+$/) && method === 'PUT') return actualizarInspeccion(request, env, path);
 
     // ---- CONFIGURACIÓN ----
     if (path === '/api/configuracion' && method === 'GET') return getConfiguracion(env);
-    if (path === '/api/configuracion' && method === 'PUT') return actualizarConfiguracion(request, env, usuario);
+    if (path === '/api/configuracion' && method === 'PUT') return actualizarConfiguracion(request, env);
 
     return errorResponse('Ruta no encontrada', 404);
   },
 };
-
-// ============================================================
-// AUTH
-// ============================================================
-async function handleLogin(request, env) {
-  const { email, password } = await request.json();
-  if (!email || !password) return errorResponse('Email y contraseña requeridos');
-  const user = await env.DB.prepare(
-    'SELECT * FROM usuarios WHERE email = ? AND activo = 1'
-  ).bind(email).first();
-  if (!user || user.password_hash !== password) return errorResponse('Credenciales inválidas', 401);
-  await env.DB.prepare('UPDATE usuarios SET ultimo_acceso = ? WHERE id = ?')
-    .bind(new Date().toISOString(), user.id).run();
-  const token = await crearToken(
-    { id: user.id, email: user.email, rol: user.rol, nombre: user.nombre },
-    env.JWT_SECRET || 'aacc_fach_secret_2024'
-  );
-  return jsonResponse({ token, usuario: { id: user.id, nombre: user.nombre, email: user.email, rol: user.rol } });
-}
-
-// ============================================================
-// USUARIOS
-// ============================================================
-async function getUsuarios(env, usuario) {
-  if (usuario.rol !== 'administrador') return errorResponse('Sin permisos', 403);
-  const { results } = await env.DB.prepare(
-    'SELECT id, nombre, email, rol, activo, creado_en, ultimo_acceso FROM usuarios ORDER BY nombre'
-  ).all();
-  return jsonResponse(results);
-}
-
-async function crearUsuario(request, env, usuario) {
-  if (usuario.rol !== 'administrador') return errorResponse('Sin permisos', 403);
-  const { nombre, email, password, rol } = await request.json();
-  if (!nombre || !email || !password) return errorResponse('Datos incompletos');
-  try {
-    const result = await env.DB.prepare(
-      'INSERT INTO usuarios (nombre, email, password_hash, rol) VALUES (?, ?, ?, ?)'
-    ).bind(nombre, email, password, rol || 'operador').run();
-    return jsonResponse({ id: result.meta.last_row_id, mensaje: 'Usuario creado' }, 201);
-  } catch { return errorResponse('Email ya existe'); }
-}
-
-async function actualizarUsuario(request, env, usuario, path) {
-  if (usuario.rol !== 'administrador') return errorResponse('Sin permisos', 403);
-  const id = path.split('/').pop();
-  const data = await request.json();
-  await env.DB.prepare('UPDATE usuarios SET nombre=?, rol=?, activo=? WHERE id=?')
-    .bind(data.nombre, data.rol, data.activo ?? 1, id).run();
-  return jsonResponse({ mensaje: 'Usuario actualizado' });
-}
 
 // ============================================================
 // DASHBOARD
@@ -183,7 +102,6 @@ async function getDashboard(env) {
   const menores = await env.DB.prepare("SELECT COUNT(*) as n FROM equipos WHERE categoria='MENOR_40000_BTU'").first();
   const alertasActivas = await env.DB.prepare("SELECT COUNT(*) as n FROM alertas WHERE estado='activa'").first();
 
-  // Próximos 5 mantenimientos
   const hoy = new Date().toISOString().split('T')[0];
   const { results: proximos } = await env.DB.prepare(`
     SELECT b.id, b.equipo_id, b.proximo_mantenimiento, b.tecnico,
@@ -191,11 +109,9 @@ async function getDashboard(env) {
     FROM bitacora_mantenimiento b
     JOIN equipos e ON b.equipo_id = e.id
     WHERE b.proximo_mantenimiento >= ?
-    ORDER BY b.proximo_mantenimiento ASC
-    LIMIT 5
+    ORDER BY b.proximo_mantenimiento ASC LIMIT 5
   `).bind(hoy).all();
 
-  // Últimas 5 entradas en bitácora
   const { results: ultimas } = await env.DB.prepare(`
     SELECT b.*, e.codigo, e.ubicacion, e.marca
     FROM bitacora_mantenimiento b
@@ -247,19 +163,19 @@ async function getEquipo(env, path) {
   return jsonResponse(equipo);
 }
 
-async function crearEquipo(request, env, usuario) {
+async function crearEquipo(request, env) {
   const d = await request.json();
-  if (!d.codigo || !d.nombre_equipo) return errorResponse('Código y datos son requeridos');
+  if (!d.codigo || !d.marca) return errorResponse('Código y marca son requeridos');
   try {
     const result = await env.DB.prepare(`
       INSERT INTO equipos (codigo, numero, categoria, tipo, hfc, marca, modelo, numero_serie,
         ubicacion, condicion, fecha_instalacion, capacidad_btu, voltaje, amperaje,
-        potencia_kw, empresa_mantenimiento, observaciones, creado_por)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        potencia_kw, empresa_mantenimiento, observaciones)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(d.codigo, d.numero, d.categoria, d.tipo, d.hfc, d.marca, d.modelo,
       d.numero_serie, d.ubicacion, d.condicion || 'ACTIVO', d.fecha_instalacion,
       d.capacidad_btu, d.voltaje, d.amperaje, d.potencia_kw, d.empresa_mantenimiento,
-      d.observaciones, usuario.id).run();
+      d.observaciones).run();
     return jsonResponse({ id: result.meta.last_row_id, mensaje: 'Equipo creado' }, 201);
   } catch (e) { return errorResponse('Código ya existe: ' + e.message); }
 }
@@ -278,8 +194,7 @@ async function actualizarEquipo(request, env, path) {
   return jsonResponse({ mensaje: 'Equipo actualizado' });
 }
 
-async function eliminarEquipo(env, usuario, path) {
-  if (usuario.rol !== 'administrador') return errorResponse('Sin permisos', 403);
+async function eliminarEquipo(env, path) {
   const id = path.split('/').pop();
   await env.DB.prepare("UPDATE equipos SET condicion='POR_BAJA', actualizado_en=datetime('now') WHERE id=?").bind(id).run();
   return jsonResponse({ mensaje: 'Equipo dado de baja' });
@@ -307,8 +222,7 @@ async function getBitacoraGeneral(env, url) {
   let query = `
     SELECT b.*, e.codigo, e.ubicacion, e.marca, e.modelo, e.categoria
     FROM bitacora_mantenimiento b
-    JOIN equipos e ON b.equipo_id = e.id
-    WHERE 1=1
+    JOIN equipos e ON b.equipo_id = e.id WHERE 1=1
   `;
   const params = [];
   if (tipo) { query += ' AND b.tipo_servicio = ?'; params.push(tipo); }
@@ -317,19 +231,18 @@ async function getBitacoraGeneral(env, url) {
   return jsonResponse(results);
 }
 
-async function crearBitacora(request, env, usuario) {
+async function crearBitacora(request, env) {
   const d = await request.json();
   if (!d.equipo_id || !d.fecha || !d.tecnico || !d.tipo_servicio || !d.descripcion_trabajo)
-    return errorResponse('Campos obligatorios: equipo_id, fecha, tecnico, tipo_servicio, descripcion_trabajo');
+    return errorResponse('Campos obligatorios faltantes');
   const result = await env.DB.prepare(`
     INSERT INTO bitacora_mantenimiento
       (equipo_id, fecha, tecnico, tipo_servicio, descripcion_trabajo,
-       repuestos_utilizados, costo, proximo_mantenimiento, observaciones, registrado_por)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+       repuestos_utilizados, costo, proximo_mantenimiento, observaciones)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(d.equipo_id, d.fecha, d.tecnico, d.tipo_servicio, d.descripcion_trabajo,
-    d.repuestos_utilizados, d.costo || 0, d.proximo_mantenimiento, d.observaciones, usuario.id).run();
+    d.repuestos_utilizados, d.costo || 0, d.proximo_mantenimiento, d.observaciones).run();
 
-  // Generar alerta si hay próximo mantenimiento
   if (d.proximo_mantenimiento) {
     const hoy = new Date();
     const proxima = new Date(d.proximo_mantenimiento);
@@ -340,12 +253,11 @@ async function crearBitacora(request, env, usuario) {
         INSERT INTO alertas (equipo_id, tipo, mensaje, criticidad)
         VALUES (?, 'PROXIMO_MANTENIMIENTO', ?, ?)
       `).bind(d.equipo_id,
-        `${equipo?.codigo} — ${equipo?.ubicacion}: mantenimiento programado para ${d.proximo_mantenimiento}`,
+        `${equipo?.codigo} — ${equipo?.ubicacion}: mantenimiento ${d.proximo_mantenimiento}`,
         diasDiff <= 7 ? 'alta' : 'media'
       ).run();
     }
   }
-
   return jsonResponse({ id: result.meta.last_row_id, mensaje: 'Registro creado' }, 201);
 }
 
@@ -378,12 +290,9 @@ async function getProximosMantenimientos(env, url) {
            e.codigo, e.ubicacion, e.marca, e.modelo, e.categoria, e.condicion
     FROM bitacora_mantenimiento b
     JOIN equipos e ON b.equipo_id = e.id
-    WHERE b.proximo_mantenimiento IS NOT NULL
-      AND b.proximo_mantenimiento != ''
-    ORDER BY b.proximo_mantenimiento ASC
-    LIMIT ?
+    WHERE b.proximo_mantenimiento IS NOT NULL AND b.proximo_mantenimiento != ''
+    ORDER BY b.proximo_mantenimiento ASC LIMIT ?
   `).bind(limite).all();
-
   const vencidos = results.filter(r => r.proximo_mantenimiento < hoy);
   const proximos = results.filter(r => r.proximo_mantenimiento >= hoy);
   return jsonResponse({ vencidos, proximos });
@@ -397,17 +306,16 @@ async function getAlertas(env, url) {
   const { results } = await env.DB.prepare(`
     SELECT a.*, e.codigo, e.ubicacion FROM alertas a
     LEFT JOIN equipos e ON a.equipo_id = e.id
-    WHERE a.estado = ?
-    ORDER BY a.fecha_alerta DESC LIMIT 50
+    WHERE a.estado = ? ORDER BY a.fecha_alerta DESC LIMIT 50
   `).bind(estado).all();
   return jsonResponse(results);
 }
 
-async function resolverAlerta(request, env, usuario, path) {
+async function resolverAlerta(env, path) {
   const id = path.split('/')[3];
   await env.DB.prepare(`
-    UPDATE alertas SET estado='resuelta', fecha_resolucion=datetime('now'), resuelto_por=? WHERE id=?
-  `).bind(usuario.id, id).run();
+    UPDATE alertas SET estado='resuelta', fecha_resolucion=datetime('now') WHERE id=?
+  `).bind(id).run();
   return jsonResponse({ mensaje: 'Alerta resuelta' });
 }
 
@@ -422,16 +330,16 @@ async function getInspecciones(env, path) {
   return jsonResponse(results);
 }
 
-async function crearInspeccion(request, env, usuario) {
+async function crearInspeccion(request, env) {
   const d = await request.json();
   const result = await env.DB.prepare(`
     INSERT INTO inspecciones (equipo_id, fecha_inspeccion, tipo_inspeccion, resultado,
       hallazgos, recomendaciones, condicion_general, proxima_inspeccion, inspector,
-      empresa_externa, costo, registrado_por)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      empresa_externa, costo)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).bind(d.equipo_id, d.fecha_inspeccion, d.tipo_inspeccion, d.resultado,
     d.hallazgos, d.recomendaciones, d.condicion_general, d.proxima_inspeccion,
-    d.inspector, d.empresa_externa, d.costo || 0, usuario.id).run();
+    d.inspector, d.empresa_externa, d.costo || 0).run();
   return jsonResponse({ id: result.meta.last_row_id, mensaje: 'Inspección registrada' }, 201);
 }
 
@@ -456,8 +364,7 @@ async function getConfiguracion(env) {
   return jsonResponse(config);
 }
 
-async function actualizarConfiguracion(request, env, usuario) {
-  if (usuario.rol !== 'administrador') return errorResponse('Sin permisos', 403);
+async function actualizarConfiguracion(request, env) {
   const data = await request.json();
   for (const [clave, valor] of Object.entries(data)) {
     await env.DB.prepare(
