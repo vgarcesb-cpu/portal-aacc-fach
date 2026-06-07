@@ -1,8 +1,18 @@
+[README.md](https://github.com/user-attachments/files/28676587/README.md)
 # ❄️ Portal A/C FACH — Climatización & Energía
 
 Sistema de gestión de mantenimiento de equipos de Aire Acondicionado para la Fuerza Aérea de Chile.
 
-**Stack:** Cloudflare Workers (backend) + Cloudflare D1 (base de datos) + GitHub Pages (frontend) — **100% gratuito.**
+**Stack:** Cloudflare Workers (backend) + Cloudflare D1 (base de datos) + Cloudflare Pages (frontend) + Cloudflare Access (seguridad) — **100% gratuito.**
+
+---
+
+## 🔐 Seguridad activa
+
+- **Cloudflare Access** → PIN al email `vgarcesb@gmail.com` — nadie llega al portal sin autenticación
+- **CORS restringido** → Worker solo acepta requests desde `https://aacc.totis.cl`
+- **Acceso directo al Worker bloqueado** → `portal-aacc-fach-api.vgarcesb.workers.dev` devuelve 403
+- **SSL automático** → HTTPS en todo el stack
 
 ---
 
@@ -10,71 +20,70 @@ Sistema de gestión de mantenimiento de equipos de Aire Acondicionado para la Fu
 
 | Archivo | Descripción |
 |---|---|
-| `index.html` | Frontend completo — HTML + CSS + JS en un solo archivo |
-| `worker.js` | Backend API REST — Cloudflare Workers |
+| `index.html` | Frontend completo — HTML + CSS + JS en un solo archivo, sin login |
+| `worker.js` | Backend API REST — Cloudflare Workers v3.1, seguridad por origen |
 | `schema.sql` | Base de datos D1 — 29 equipos FACH precargados |
 | `wrangler.toml` | Configuración del Worker |
 
 ---
 
-## 🚀 Despliegue paso a paso (100% visual, sin terminal)
+## 🌐 URLs del sistema
+
+| Recurso | URL |
+|---|---|
+| Portal (acceso oficial) | `https://aacc.totis.cl` |
+| Frontend Pages | `https://portal-aacc-fach.pages.dev` |
+| Backend Worker | `https://portal-aacc-fach-api.vgarcesb.workers.dev` |
+| Health check | `https://portal-aacc-fach-api.vgarcesb.workers.dev/api/health` |
+
+---
+
+## 🚀 Despliegue inicial (ya realizado)
 
 ### PASO 1 — Crear la base de datos D1
-
 1. Ir a [dash.cloudflare.com](https://dash.cloudflare.com)
 2. **Workers & Pages → D1 SQL Database → Create database**
 3. Nombre: `portal-aacc-fach-db`
 4. Copiar el **Database ID**
-5. Pestaña **Console** → pegar el contenido de `schema.sql` → **Execute**
+5. Pestaña **Console** → ejecutar `schema.sql` en 4 partes separadas
 
 ### PASO 2 — Actualizar wrangler.toml
-
-1. En GitHub, editar `wrangler.toml` con el lápiz ✏️
-2. Reemplazar `REEMPLAZAR_CON_TU_DATABASE_ID` con el ID copiado
-3. Commit
+1. Editar `wrangler.toml` en GitHub con el lápiz ✏️
+2. Reemplazar `REEMPLAZAR_CON_TU_DATABASE_ID` con el Database ID real
 
 ### PASO 3 — Crear el Worker (backend API)
-
-1. **Workers & Pages → Create → Create Worker**
+1. **Workers & Pages → Create → Start with Hello World**
 2. Nombre: `portal-aacc-fach-api` → **Deploy**
-3. **Edit code** → borrar todo → pegar contenido de `worker.js` → **Deploy**
-4. Pestaña **Settings → Variables**:
-   - `JWT_SECRET` = una contraseña segura (mínimo 32 caracteres)
-5. Pestaña **Settings → D1 Database Bindings**:
-   - Variable: `DB` → seleccionar `portal-aacc-fach-db`
-6. **Save and Deploy**
-7. Copiar la URL del Worker: `https://portal-aacc-fach-api.TU-USUARIO.workers.dev`
+3. **Edit code** → borrar todo → pegar `worker.js` → **Deploy**
+4. **Settings → Variables and Secrets**: agregar `JWT_SECRET`
+5. **Bindings → Add binding**: `DB` → `portal-aacc-fach-db`
 
-### PASO 4 — Desplegar el frontend en Cloudflare Pages
-
-1. **Workers & Pages → Create → Pages → Connect to Git**
-2. Seleccionar este repositorio
-3. Configuración de build: **Framework preset = None**, dejar todo vacío
+### PASO 4 — Desplegar frontend en Cloudflare Pages
+1. **Workers & Pages → Create → Pages → Import Git repository**
+2. Seleccionar `vgarcesb-cpu/portal-aacc-fach`
+3. Framework preset: **None** — todo vacío
 4. **Save and Deploy**
 
-### PASO 5 — Conectar el frontend al backend
-
-1. Abrir la URL de Pages en el navegador
-2. Ir a **⚙️ Configuración → API Worker**
-3. Pegar la URL del Worker del Paso 3
-4. Clic en **Probar Conexión** → debe aparecer ✅
-5. **Guardar Configuración**
-
-### PASO 6 — Primer login
-
-| Campo | Valor por defecto |
-|---|---|
-| Email | `admin@fach.cl` |
-| Contraseña | `Admin2024!` |
-
-> ⚠️ Cambiar la contraseña del administrador después del primer login.
+### PASO 5 — Dominio personalizado
+1. DNS de `totis.cl` → agregar CNAME: `aacc` → `portal-aacc-fach.pages.dev` (Proxied)
+2. Pages → **Custom domains** → agregar `aacc.totis.cl`
 
 ---
 
 ## 🔄 Actualizaciones diarias
 
-- **Frontend:** Editar `index.html` en GitHub con ✏️ → Commit → Cloudflare Pages actualiza automáticamente
+- **Frontend:** Editar `index.html` en GitHub con ✏️ → Commit → Pages actualiza en ~30 segundos
 - **Backend:** Editar `worker.js` en GitHub → Copiar y pegar en el editor web del Worker → Deploy
+
+---
+
+## ⚙️ Configuración del sistema
+
+Al ingresar al portal por primera vez en un navegador nuevo:
+1. Ir a **⚙️ Configuración → API Worker**
+2. Pegar: `https://portal-aacc-fach-api.vgarcesb.workers.dev`
+3. Clic en **Probar Conexión** → debe aparecer ✅ Conectado — Portal A/C FACH v3.1.0
+4. Clic en **Guardar Configuración**
 
 ---
 
