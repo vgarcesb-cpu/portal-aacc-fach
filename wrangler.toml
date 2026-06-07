@@ -1,0 +1,17 @@
+# wrangler.toml - Portal A/C FACH
+# Configuración de Cloudflare Workers
+# Autor: Victor Manuel Garces Borje (totis.cl)
+
+name = "portal-aacc-fach-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Base de datos D1 (gratis en Cloudflare)
+[[d1_databases]]
+binding = "DB"
+database_name = "portal-aacc-fach-db"
+database_id = "REEMPLAZAR_CON_TU_DATABASE_ID"
+
+# Variables de entorno:
+# Agregar en Cloudflare Dashboard > Workers > Settings > Variables
+# JWT_SECRET = "tu_secreto_muy_seguro_aqui_minimo_32_caracteres"
