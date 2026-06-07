@@ -10,7 +10,7 @@ compatibility_date = "2024-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "portal-aacc-fach-db"
-database_id = "REEMPLAZAR_CON_TU_DATABASE_ID"
+database_id = "0263cd10-255c-4872-92bb-2398a946aaa3"
 
 # Variables de entorno:
 # Agregar en Cloudflare Dashboard > Workers > Settings > Variables
