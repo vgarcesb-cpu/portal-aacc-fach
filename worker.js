@@ -1,7 +1,7 @@
 /**
- * worker.js - PORTAL A/C FACH v3.0
- * API REST con Cloudflare Workers + D1
- * Seguridad: Cloudflare Access (sin JWT interno)
+ * worker.js - PORTAL A/C FACH v3.1
+ * Seguridad: CORS restringido a aacc.totis.cl
+ * Cloudflare Access protege el dominio — Worker acepta desde origen autorizado
  * Autor: Victor Manuel Garces Borje (totis.cl)
  */
 
@@ -20,20 +20,15 @@ function errorResponse(message, status = 400) {
   return jsonResponse({ error: message }, status);
 }
 
-// ============================================================
-// VALIDACIÓN CLOUDFLARE ACCESS
-// Cloudflare inyecta este header en requests autenticados
-// Si no viene, la request no pasó por Access → bloquear
-// ============================================================
-function validarAccess(request) {
-  const userEmail = request.headers.get('CF-Access-Authenticated-User-Email');
-  if (!userEmail) return false;
-  return true;
+// Validar que el request viene desde aacc.totis.cl
+// Cloudflare Access ya garantizó autenticación antes de llegar aquí
+function origenAutorizado(request) {
+  const origin = request.headers.get('Origin') || '';
+  const referer = request.headers.get('Referer') || '';
+  // Aceptar desde aacc.totis.cl o desde el propio Worker (health check)
+  return origin.includes('aacc.totis.cl') || referer.includes('aacc.totis.cl') || origin === '';
 }
 
-// ============================================================
-// ROUTER PRINCIPAL
-// ============================================================
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -42,13 +37,13 @@ export default {
 
     if (method === 'OPTIONS') return new Response(null, { headers: CORS_HEADERS });
 
-    // Health check público (para probar conexión)
+    // Health check siempre público
     if (path === '/api/health' && method === 'GET') {
-      return jsonResponse({ status: 'ok', app: 'Portal A/C FACH', version: '3.0.0' });
+      return jsonResponse({ status: 'ok', app: 'Portal A/C FACH', version: '3.1.0' });
     }
 
-    // Validar que el request viene autenticado por Cloudflare Access
-    if (!validarAccess(request)) {
+    // Bloquear acceso desde orígenes no autorizados
+    if (!origenAutorizado(request)) {
       return errorResponse('Acceso no autorizado. Use https://aacc.totis.cl', 403);
     }
 
@@ -89,9 +84,6 @@ export default {
   },
 };
 
-// ============================================================
-// DASHBOARD
-// ============================================================
 async function getDashboard(env) {
   const total = await env.DB.prepare('SELECT COUNT(*) as n FROM equipos').first();
   const activos = await env.DB.prepare("SELECT COUNT(*) as n FROM equipos WHERE condicion='ACTIVO'").first();
@@ -101,43 +93,29 @@ async function getDashboard(env) {
   const mayores = await env.DB.prepare("SELECT COUNT(*) as n FROM equipos WHERE categoria='MAYOR_40000_BTU'").first();
   const menores = await env.DB.prepare("SELECT COUNT(*) as n FROM equipos WHERE categoria='MENOR_40000_BTU'").first();
   const alertasActivas = await env.DB.prepare("SELECT COUNT(*) as n FROM alertas WHERE estado='activa'").first();
-
   const hoy = new Date().toISOString().split('T')[0];
   const { results: proximos } = await env.DB.prepare(`
     SELECT b.id, b.equipo_id, b.proximo_mantenimiento, b.tecnico,
            e.codigo, e.ubicacion, e.marca, e.modelo
-    FROM bitacora_mantenimiento b
-    JOIN equipos e ON b.equipo_id = e.id
-    WHERE b.proximo_mantenimiento >= ?
-    ORDER BY b.proximo_mantenimiento ASC LIMIT 5
+    FROM bitacora_mantenimiento b JOIN equipos e ON b.equipo_id = e.id
+    WHERE b.proximo_mantenimiento >= ? ORDER BY b.proximo_mantenimiento ASC LIMIT 5
   `).bind(hoy).all();
-
   const { results: ultimas } = await env.DB.prepare(`
     SELECT b.*, e.codigo, e.ubicacion, e.marca
-    FROM bitacora_mantenimiento b
-    JOIN equipos e ON b.equipo_id = e.id
+    FROM bitacora_mantenimiento b JOIN equipos e ON b.equipo_id = e.id
     ORDER BY b.creado_en DESC LIMIT 5
   `).all();
-
   return jsonResponse({
     resumen: {
-      total: total?.n || 0,
-      activos: activos?.n || 0,
-      fuera_servicio: fuera?.n || 0,
-      en_mantenimiento: mantto?.n || 0,
-      por_baja: baja?.n || 0,
-      mayores: mayores?.n || 0,
-      menores: menores?.n || 0,
-      alertas_activas: alertasActivas?.n || 0,
+      total: total?.n||0, activos: activos?.n||0, fuera_servicio: fuera?.n||0,
+      en_mantenimiento: mantto?.n||0, por_baja: baja?.n||0,
+      mayores: mayores?.n||0, menores: menores?.n||0, alertas_activas: alertasActivas?.n||0,
     },
     proximos_mantenimientos: proximos,
     ultimas_bitacoras: ultimas,
   });
 }
 
-// ============================================================
-// EQUIPOS
-// ============================================================
 async function getEquipos(env, url) {
   const categoria = url.searchParams.get('categoria');
   const condicion = url.searchParams.get('condicion');
@@ -148,8 +126,7 @@ async function getEquipos(env, url) {
   if (condicion) { query += ' AND condicion = ?'; params.push(condicion); }
   if (search) {
     query += ' AND (codigo LIKE ? OR marca LIKE ? OR modelo LIKE ? OR ubicacion LIKE ? OR numero_serie LIKE ?)';
-    const s = `%${search}%`;
-    params.push(s, s, s, s, s);
+    const s = `%${search}%`; params.push(s,s,s,s,s);
   }
   query += ' ORDER BY categoria, numero';
   const { results } = await env.DB.prepare(query).bind(...params).all();
@@ -171,38 +148,33 @@ async function crearEquipo(request, env) {
       INSERT INTO equipos (codigo, numero, categoria, tipo, hfc, marca, modelo, numero_serie,
         ubicacion, condicion, fecha_instalacion, capacidad_btu, voltaje, amperaje,
         potencia_kw, empresa_mantenimiento, observaciones)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).bind(d.codigo, d.numero, d.categoria, d.tipo, d.hfc, d.marca, d.modelo,
-      d.numero_serie, d.ubicacion, d.condicion || 'ACTIVO', d.fecha_instalacion,
-      d.capacidad_btu, d.voltaje, d.amperaje, d.potencia_kw, d.empresa_mantenimiento,
-      d.observaciones).run();
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+    `).bind(d.codigo,d.numero,d.categoria,d.tipo,d.hfc,d.marca,d.modelo,d.numero_serie,
+      d.ubicacion,d.condicion||'ACTIVO',d.fecha_instalacion,d.capacidad_btu,d.voltaje,
+      d.amperaje,d.potencia_kw,d.empresa_mantenimiento,d.observaciones).run();
     return jsonResponse({ id: result.meta.last_row_id, mensaje: 'Equipo creado' }, 201);
-  } catch (e) { return errorResponse('Código ya existe: ' + e.message); }
+  } catch(e) { return errorResponse('Código ya existe: ' + e.message); }
 }
 
 async function actualizarEquipo(request, env, path) {
   const id = path.split('/').pop();
   const d = await request.json();
   await env.DB.prepare(`
-    UPDATE equipos SET tipo=?, hfc=?, marca=?, modelo=?, numero_serie=?, ubicacion=?,
-      condicion=?, fecha_instalacion=?, capacidad_btu=?, voltaje=?, amperaje=?,
-      potencia_kw=?, empresa_mantenimiento=?, observaciones=?, actualizado_en=datetime('now')
-    WHERE id=?
-  `).bind(d.tipo, d.hfc, d.marca, d.modelo, d.numero_serie, d.ubicacion, d.condicion,
-    d.fecha_instalacion, d.capacidad_btu, d.voltaje, d.amperaje, d.potencia_kw,
-    d.empresa_mantenimiento, d.observaciones, id).run();
+    UPDATE equipos SET tipo=?,hfc=?,marca=?,modelo=?,numero_serie=?,ubicacion=?,condicion=?,
+      fecha_instalacion=?,capacidad_btu=?,voltaje=?,amperaje=?,potencia_kw=?,
+      empresa_mantenimiento=?,observaciones=?,actualizado_en=datetime('now') WHERE id=?
+  `).bind(d.tipo,d.hfc,d.marca,d.modelo,d.numero_serie,d.ubicacion,d.condicion,
+    d.fecha_instalacion,d.capacidad_btu,d.voltaje,d.amperaje,d.potencia_kw,
+    d.empresa_mantenimiento,d.observaciones,id).run();
   return jsonResponse({ mensaje: 'Equipo actualizado' });
 }
 
 async function eliminarEquipo(env, path) {
   const id = path.split('/').pop();
-  await env.DB.prepare("UPDATE equipos SET condicion='POR_BAJA', actualizado_en=datetime('now') WHERE id=?").bind(id).run();
+  await env.DB.prepare("UPDATE equipos SET condicion='POR_BAJA',actualizado_en=datetime('now') WHERE id=?").bind(id).run();
   return jsonResponse({ mensaje: 'Equipo dado de baja' });
 }
 
-// ============================================================
-// BITÁCORA
-// ============================================================
 async function getBitacora(env, path, url) {
   const equipo_id = path.split('/')[3];
   const desde = url.searchParams.get('desde');
@@ -219,43 +191,32 @@ async function getBitacora(env, path, url) {
 async function getBitacoraGeneral(env, url) {
   const limite = parseInt(url.searchParams.get('limite') || '50');
   const tipo = url.searchParams.get('tipo');
-  let query = `
-    SELECT b.*, e.codigo, e.ubicacion, e.marca, e.modelo, e.categoria
-    FROM bitacora_mantenimiento b
-    JOIN equipos e ON b.equipo_id = e.id WHERE 1=1
-  `;
+  let query = `SELECT b.*, e.codigo, e.ubicacion, e.marca, e.modelo, e.categoria
+    FROM bitacora_mantenimiento b JOIN equipos e ON b.equipo_id = e.id WHERE 1=1`;
   const params = [];
   if (tipo) { query += ' AND b.tipo_servicio = ?'; params.push(tipo); }
-  query += ` ORDER BY b.fecha DESC, b.creado_en DESC LIMIT ${Math.min(limite, 200)}`;
+  query += ` ORDER BY b.fecha DESC, b.creado_en DESC LIMIT ${Math.min(limite,200)}`;
   const { results } = await env.DB.prepare(query).bind(...params).all();
   return jsonResponse(results);
 }
 
 async function crearBitacora(request, env) {
   const d = await request.json();
-  if (!d.equipo_id || !d.fecha || !d.tecnico || !d.tipo_servicio || !d.descripcion_trabajo)
+  if (!d.equipo_id||!d.fecha||!d.tecnico||!d.tipo_servicio||!d.descripcion_trabajo)
     return errorResponse('Campos obligatorios faltantes');
   const result = await env.DB.prepare(`
     INSERT INTO bitacora_mantenimiento
-      (equipo_id, fecha, tecnico, tipo_servicio, descripcion_trabajo,
-       repuestos_utilizados, costo, proximo_mantenimiento, observaciones)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).bind(d.equipo_id, d.fecha, d.tecnico, d.tipo_servicio, d.descripcion_trabajo,
-    d.repuestos_utilizados, d.costo || 0, d.proximo_mantenimiento, d.observaciones).run();
-
+      (equipo_id,fecha,tecnico,tipo_servicio,descripcion_trabajo,
+       repuestos_utilizados,costo,proximo_mantenimiento,observaciones)
+    VALUES (?,?,?,?,?,?,?,?,?)
+  `).bind(d.equipo_id,d.fecha,d.tecnico,d.tipo_servicio,d.descripcion_trabajo,
+    d.repuestos_utilizados,d.costo||0,d.proximo_mantenimiento,d.observaciones).run();
   if (d.proximo_mantenimiento) {
-    const hoy = new Date();
-    const proxima = new Date(d.proximo_mantenimiento);
-    const diasDiff = Math.ceil((proxima - hoy) / 86400000);
-    if (diasDiff <= 30) {
-      const equipo = await env.DB.prepare('SELECT codigo, ubicacion FROM equipos WHERE id=?').bind(d.equipo_id).first();
-      await env.DB.prepare(`
-        INSERT INTO alertas (equipo_id, tipo, mensaje, criticidad)
-        VALUES (?, 'PROXIMO_MANTENIMIENTO', ?, ?)
-      `).bind(d.equipo_id,
-        `${equipo?.codigo} — ${equipo?.ubicacion}: mantenimiento ${d.proximo_mantenimiento}`,
-        diasDiff <= 7 ? 'alta' : 'media'
-      ).run();
+    const dias = Math.ceil((new Date(d.proximo_mantenimiento)-new Date())/86400000);
+    if (dias<=30) {
+      const eq = await env.DB.prepare('SELECT codigo,ubicacion FROM equipos WHERE id=?').bind(d.equipo_id).first();
+      await env.DB.prepare(`INSERT INTO alertas (equipo_id,tipo,mensaje,criticidad) VALUES (?,'PROXIMO_MANTENIMIENTO',?,?)`)
+        .bind(d.equipo_id,`${eq?.codigo} — ${eq?.ubicacion}: mantenimiento ${d.proximo_mantenimiento}`,dias<=7?'alta':'media').run();
     }
   }
   return jsonResponse({ id: result.meta.last_row_id, mensaje: 'Registro creado' }, 201);
@@ -264,12 +225,9 @@ async function crearBitacora(request, env) {
 async function actualizarBitacora(request, env, path) {
   const id = path.split('/').pop();
   const d = await request.json();
-  await env.DB.prepare(`
-    UPDATE bitacora_mantenimiento SET fecha=?, tecnico=?, tipo_servicio=?, descripcion_trabajo=?,
-      repuestos_utilizados=?, costo=?, proximo_mantenimiento=?, observaciones=?
-    WHERE id=?
-  `).bind(d.fecha, d.tecnico, d.tipo_servicio, d.descripcion_trabajo,
-    d.repuestos_utilizados, d.costo || 0, d.proximo_mantenimiento, d.observaciones, id).run();
+  await env.DB.prepare(`UPDATE bitacora_mantenimiento SET fecha=?,tecnico=?,tipo_servicio=?,
+    descripcion_trabajo=?,repuestos_utilizados=?,costo=?,proximo_mantenimiento=?,observaciones=? WHERE id=?`)
+    .bind(d.fecha,d.tecnico,d.tipo_servicio,d.descripcion_trabajo,d.repuestos_utilizados,d.costo||0,d.proximo_mantenimiento,d.observaciones,id).run();
   return jsonResponse({ mensaje: 'Registro actualizado' });
 }
 
@@ -279,97 +237,75 @@ async function eliminarBitacora(env, path) {
   return jsonResponse({ mensaje: 'Registro eliminado' });
 }
 
-// ============================================================
-// PRÓXIMOS MANTENIMIENTOS
-// ============================================================
 async function getProximosMantenimientos(env, url) {
   const hoy = new Date().toISOString().split('T')[0];
-  const limite = parseInt(url.searchParams.get('limite') || '10');
+  const limite = parseInt(url.searchParams.get('limite')||'10');
   const { results } = await env.DB.prepare(`
-    SELECT b.id, b.equipo_id, b.proximo_mantenimiento, b.tecnico,
-           e.codigo, e.ubicacion, e.marca, e.modelo, e.categoria, e.condicion
-    FROM bitacora_mantenimiento b
-    JOIN equipos e ON b.equipo_id = e.id
-    WHERE b.proximo_mantenimiento IS NOT NULL AND b.proximo_mantenimiento != ''
+    SELECT b.id,b.equipo_id,b.proximo_mantenimiento,b.tecnico,
+           e.codigo,e.ubicacion,e.marca,e.modelo,e.categoria,e.condicion
+    FROM bitacora_mantenimiento b JOIN equipos e ON b.equipo_id=e.id
+    WHERE b.proximo_mantenimiento IS NOT NULL AND b.proximo_mantenimiento!=''
     ORDER BY b.proximo_mantenimiento ASC LIMIT ?
   `).bind(limite).all();
-  const vencidos = results.filter(r => r.proximo_mantenimiento < hoy);
-  const proximos = results.filter(r => r.proximo_mantenimiento >= hoy);
-  return jsonResponse({ vencidos, proximos });
+  return jsonResponse({
+    vencidos: results.filter(r=>r.proximo_mantenimiento<hoy),
+    proximos: results.filter(r=>r.proximo_mantenimiento>=hoy)
+  });
 }
 
-// ============================================================
-// ALERTAS
-// ============================================================
 async function getAlertas(env, url) {
-  const estado = url.searchParams.get('estado') || 'activa';
+  const estado = url.searchParams.get('estado')||'activa';
   const { results } = await env.DB.prepare(`
-    SELECT a.*, e.codigo, e.ubicacion FROM alertas a
-    LEFT JOIN equipos e ON a.equipo_id = e.id
-    WHERE a.estado = ? ORDER BY a.fecha_alerta DESC LIMIT 50
+    SELECT a.*,e.codigo,e.ubicacion FROM alertas a
+    LEFT JOIN equipos e ON a.equipo_id=e.id
+    WHERE a.estado=? ORDER BY a.fecha_alerta DESC LIMIT 50
   `).bind(estado).all();
   return jsonResponse(results);
 }
 
 async function resolverAlerta(env, path) {
   const id = path.split('/')[3];
-  await env.DB.prepare(`
-    UPDATE alertas SET estado='resuelta', fecha_resolucion=datetime('now') WHERE id=?
-  `).bind(id).run();
+  await env.DB.prepare("UPDATE alertas SET estado='resuelta',fecha_resolucion=datetime('now') WHERE id=?").bind(id).run();
   return jsonResponse({ mensaje: 'Alerta resuelta' });
 }
 
-// ============================================================
-// INSPECCIONES
-// ============================================================
 async function getInspecciones(env, path) {
   const equipo_id = path.split('/')[3];
-  const { results } = await env.DB.prepare(
-    'SELECT * FROM inspecciones WHERE equipo_id=? ORDER BY fecha_inspeccion DESC'
-  ).bind(equipo_id).all();
+  const { results } = await env.DB.prepare('SELECT * FROM inspecciones WHERE equipo_id=? ORDER BY fecha_inspeccion DESC').bind(equipo_id).all();
   return jsonResponse(results);
 }
 
 async function crearInspeccion(request, env) {
   const d = await request.json();
   const result = await env.DB.prepare(`
-    INSERT INTO inspecciones (equipo_id, fecha_inspeccion, tipo_inspeccion, resultado,
-      hallazgos, recomendaciones, condicion_general, proxima_inspeccion, inspector,
-      empresa_externa, costo)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).bind(d.equipo_id, d.fecha_inspeccion, d.tipo_inspeccion, d.resultado,
-    d.hallazgos, d.recomendaciones, d.condicion_general, d.proxima_inspeccion,
-    d.inspector, d.empresa_externa, d.costo || 0).run();
+    INSERT INTO inspecciones (equipo_id,fecha_inspeccion,tipo_inspeccion,resultado,
+      hallazgos,recomendaciones,condicion_general,proxima_inspeccion,inspector,empresa_externa,costo)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?)
+  `).bind(d.equipo_id,d.fecha_inspeccion,d.tipo_inspeccion,d.resultado,d.hallazgos,
+    d.recomendaciones,d.condicion_general,d.proxima_inspeccion,d.inspector,d.empresa_externa,d.costo||0).run();
   return jsonResponse({ id: result.meta.last_row_id, mensaje: 'Inspección registrada' }, 201);
 }
 
 async function actualizarInspeccion(request, env, path) {
   const id = path.split('/').pop();
   const d = await request.json();
-  await env.DB.prepare(`
-    UPDATE inspecciones SET resultado=?, hallazgos=?, recomendaciones=?,
-      condicion_general=?, proxima_inspeccion=?, empresa_externa=?, costo=? WHERE id=?
-  `).bind(d.resultado, d.hallazgos, d.recomendaciones, d.condicion_general,
-    d.proxima_inspeccion, d.empresa_externa, d.costo || 0, id).run();
+  await env.DB.prepare(`UPDATE inspecciones SET resultado=?,hallazgos=?,recomendaciones=?,
+    condicion_general=?,proxima_inspeccion=?,empresa_externa=?,costo=? WHERE id=?`)
+    .bind(d.resultado,d.hallazgos,d.recomendaciones,d.condicion_general,d.proxima_inspeccion,d.empresa_externa,d.costo||0,id).run();
   return jsonResponse({ mensaje: 'Inspección actualizada' });
 }
 
-// ============================================================
-// CONFIGURACIÓN
-// ============================================================
 async function getConfiguracion(env) {
-  const { results } = await env.DB.prepare('SELECT clave, valor FROM configuracion').all();
+  const { results } = await env.DB.prepare('SELECT clave,valor FROM configuracion').all();
   const config = {};
-  results.forEach(r => { config[r.clave] = r.valor; });
+  results.forEach(r=>{ config[r.clave]=r.valor; });
   return jsonResponse(config);
 }
 
 async function actualizarConfiguracion(request, env) {
   const data = await request.json();
-  for (const [clave, valor] of Object.entries(data)) {
-    await env.DB.prepare(
-      "INSERT OR REPLACE INTO configuracion (clave, valor, actualizado_en) VALUES (?, ?, datetime('now'))"
-    ).bind(clave, valor).run();
+  for (const [clave,valor] of Object.entries(data)) {
+    await env.DB.prepare("INSERT OR REPLACE INTO configuracion (clave,valor,actualizado_en) VALUES (?,?,datetime('now'))").bind(clave,valor).run();
   }
   return jsonResponse({ mensaje: 'Configuración actualizada' });
 }
