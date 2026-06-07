@@ -17,24 +17,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);}
-
-/* ── LOGIN ── */
-#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#003366,#0050a0);}
-.login-box{background:white;border-radius:16px;padding:40px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center;}
-.login-logo{font-size:52px;margin-bottom:8px;}
-.login-box h1{color:var(--primary);font-size:20px;margin-bottom:4px;}
-.login-box p{color:var(--muted);font-size:13px;margin-bottom:28px;}
-.login-box input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:8px;font-size:14px;margin-bottom:12px;outline:none;transition:border-color .2s;}
-.login-box input:focus{border-color:var(--secondary);}
-.btn-login{width:100%;padding:13px;background:var(--secondary);color:white;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;}
-.btn-login:hover{background:var(--primary);}
-.login-error{color:var(--danger);font-size:13px;margin-top:8px;display:none;}
-
-/* ── APP ── */
-#app{display:none;}
 .layout{display:flex;min-height:100vh;}
-
-/* ── SIDEBAR ── */
 .sidebar{width:var(--sidebar-w);background:var(--primary);color:white;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;transition:transform .3s;}
 .sidebar-header{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.1);text-align:center;}
 .sidebar-header .app-icon{font-size:36px;}
@@ -46,55 +29,37 @@ body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);}
 .nav-item:hover{background:rgba(255,255,255,.1);}
 .nav-item.active{background:rgba(255,255,255,.15);border-left-color:var(--accent);}
 .nav-item .icon{font-size:15px;width:20px;text-align:center;}
-.sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.1);font-size:11px;opacity:.7;}
-.user-info{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.user-avatar{width:30px;height:30px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);font-size:12px;}
-.btn-logout{width:100%;padding:7px;background:rgba(255,255,255,.1);color:white;border:none;border-radius:6px;cursor:pointer;font-size:12px;}
-.btn-logout:hover{background:rgba(255,255,255,.2);}
-
-/* ── MAIN ── */
+.sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.1);font-size:11px;opacity:.7;text-align:center;}
 .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;}
 .topbar{background:white;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
 .topbar h1{font-size:17px;font-weight:700;color:var(--primary);}
-.topbar-actions{display:flex;gap:8px;}
 .section{display:none;padding:24px;}
 .section.active{display:block;}
-
-/* ── CARDS ── */
 .card{background:white;border-radius:12px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.06);}
 .card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .card-title{font-size:14px;font-weight:600;color:var(--primary);}
 .card-body{padding:20px;}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;}
-.stat-card{background:white;border-radius:12px;padding:16px 20px;border:1px solid var(--border);text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.stat-card{background:white;border-radius:12px;padding:16px 20px;border:1px solid var(--border);text-align:center;}
 .stat-card.success{border-color:#bbf7d0;background:#f0fdf4;}
 .stat-card.danger{border-color:#fecaca;background:#fef2f2;}
 .stat-card.warning{border-color:#fde68a;background:#fffbeb;}
 .stat-icon{font-size:24px;margin-bottom:6px;}
 .stat-value{font-size:28px;font-weight:700;color:var(--primary);}
 .stat-label{font-size:11px;color:var(--muted);margin-top:2px;}
-
-/* ── TABLA ── */
 .table-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 th{background:#f8fafc;padding:10px 12px;text-align:left;font-weight:600;color:var(--muted);border-bottom:2px solid var(--border);white-space:nowrap;}
 td{padding:10px 12px;border-bottom:1px solid #f1f5f9;}
 tr:hover td{background:#fafafa;}
-
-/* ── BOTONES ── */
 .btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
 .btn-primary{background:var(--secondary);color:white;}
 .btn-primary:hover{background:var(--primary);}
 .btn-success{background:var(--success);color:white;}
-.btn-success:hover{background:#15803d;}
 .btn-danger{background:var(--danger);color:white;}
-.btn-danger:hover{background:#b91c1c;}
-.btn-warning{background:var(--warning);color:white;}
 .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
 .btn-outline:hover{background:#f8fafc;}
 .btn-sm{padding:5px 10px;font-size:12px;}
-
-/* ── FORMS ── */
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .form-group{display:flex;flex-direction:column;gap:4px;}
 .form-group.full{grid-column:1/-1;}
@@ -104,16 +69,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--secondary);}
 textarea{resize:vertical;min-height:80px;}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
 .filters input,.filters select{flex:1;min-width:120px;}
-
-/* ── BADGES ── */
 .badge{padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;}
 .badge-success{background:#dcfce7;color:#15803d;}
 .badge-danger{background:#fef2f2;color:#dc2626;}
 .badge-warning{background:#fef9c3;color:#a16207;}
 .badge-info{background:#eff6ff;color:#1d4ed8;}
 .badge-gray{background:#f1f5f9;color:#475569;}
-
-/* ── MODAL ── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px;}
 .modal-overlay.open{display:flex;}
 .modal{background:white;border-radius:16px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;}
@@ -122,33 +83,19 @@ textarea{resize:vertical;min-height:80px;}
 .btn-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px;}
 .modal-body{padding:24px;}
 .modal-footer{padding:0 24px 20px;display:flex;justify-content:flex-end;gap:8px;}
-
-/* ── TABS ── */
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:20px;}
 .tab-btn{padding:8px 16px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;}
 .tab-btn.active{color:var(--secondary);border-bottom-color:var(--secondary);}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
-
-/* ── ALERT BANNER ── */
-.alert-banner{padding:12px 16px;border-radius:10px;font-size:13px;margin-bottom:16px;border:1px solid;}
-.alert-banner.danger{background:#fef2f2;border-color:#fecaca;color:#991b1b;}
-.alert-banner.warning{background:#fffbeb;border-color:#fde68a;color:#92400e;}
-
-/* ── EMPTY ── */
 .empty-state{text-align:center;padding:40px;color:var(--muted);}
 .empty-state .empty-icon{font-size:40px;margin-bottom:8px;}
-.empty-state p{font-size:13px;}
-
-/* ── TOAST ── */
 #toast-container{position:fixed;top:20px;right:20px;z-index:1000;display:flex;flex-direction:column;gap:8px;}
 .toast{padding:12px 20px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,.15);animation:slideIn .3s ease;}
 .toast.success{background:#16a34a;color:white;}
 .toast.error{background:#dc2626;color:white;}
 .toast.info{background:#0050a0;color:white;}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}
-
-/* ── MÓVIL ── */
 .menu-toggle{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--primary);}
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%);}
@@ -164,307 +111,235 @@ textarea{resize:vertical;min-height:80px;}
 
 <div id="toast-container"></div>
 
-<!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-logo">❄️</div>
-    <h1>Portal A/C FACH</h1>
-    <p>Climatización &amp; Energía — Sistema de Gestión de Mantenimiento</p>
-    <input type="email" id="login-email" placeholder="Email" value="admin@fach.cl" autocomplete="username">
-    <input type="password" id="login-pass" placeholder="Contraseña" value="Admin2024!" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="btn-login" onclick="doLogin()">Ingresar al Sistema</button>
-    <div id="login-error" class="login-error">Credenciales incorrectas</div>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="app-icon">❄️</div>
+      <h2>Portal A/C FACH</h2>
+      <p>Climatización &amp; Energía</p>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Principal</div>
+      <div class="nav-item active" onclick="showSection('dashboard')"><span class="icon">📊</span> Dashboard</div>
+      <div class="nav-section">Equipos</div>
+      <div class="nav-item" onclick="showSection('equipos')"><span class="icon">❄️</span> Inventario Equipos</div>
+      <div class="nav-item" onclick="showSection('bitacora')"><span class="icon">📝</span> Bitácora</div>
+      <div class="nav-item" onclick="showSection('inspecciones')"><span class="icon">🔍</span> Inspecciones</div>
+      <div class="nav-section">Alertas</div>
+      <div class="nav-item" onclick="showSection('alertas')"><span class="icon">🔔</span> Alertas <span id="badge-alertas" style="background:#dc2626;color:white;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:4px;display:none;"></span></div>
+      <div class="nav-section">Sistema</div>
+      <div class="nav-item" onclick="showSection('reportes')"><span class="icon">📄</span> Reportes</div>
+      <div class="nav-item" onclick="showSection('configuracion')"><span class="icon">⚙️</span> Configuración</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div>❄️ FACH — Climatización &amp; Energía</div>
+      <div style="margin-top:4px;">totis.cl · 2026</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <h1 id="page-title">Dashboard</h1>
+      </div>
+      <span style="font-size:12px;color:var(--muted);" id="topbar-fecha"></span>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="sec-dashboard" class="section active">
+      <div id="stat-grid" class="stat-grid"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="card">
+          <div class="card-header"><span class="card-title">📅 Próximos Mantenimientos</span></div>
+          <div class="card-body" id="dash-proximos"><div class="empty-state"><div class="empty-icon">📅</div><p>Cargando...</p></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">📝 Últimas Bitácoras</span></div>
+          <div class="card-body" id="dash-ultimas"><div class="empty-state"><div class="empty-icon">📝</div><p>Cargando...</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EQUIPOS -->
+    <div id="sec-equipos" class="section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">❄️ Inventario de Equipos A/C — FACH</span>
+          <button class="btn btn-primary" onclick="openModal('modal-equipo')">+ Nuevo Equipo</button>
+        </div>
+        <div class="card-body">
+          <div class="filters">
+            <input id="search-eq" placeholder="🔍 Buscar código, marca, ubicación..." oninput="filtrarEquipos()">
+            <select id="filter-cat" onchange="filtrarEquipos()">
+              <option value="">Todas las categorías</option>
+              <option value="MAYOR_40000_BTU">Mayor 40.000 BTU</option>
+              <option value="MENOR_40000_BTU">Menor 40.000 BTU</option>
+            </select>
+            <select id="filter-cond" onchange="filtrarEquipos()">
+              <option value="">Todas las condiciones</option>
+              <option value="ACTIVO">Activo</option>
+              <option value="FUERA_DE_SERVICIO">Fuera de Servicio</option>
+              <option value="EN_MANTENIMIENTO">En Mantenimiento</option>
+              <option value="POR_BAJA">Por Baja</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Código</th><th>Categoría</th><th>Tipo</th><th>HFC</th><th>Marca / Modelo</th><th>N° Serie</th><th>Ubicación</th><th>Condición</th><th>Acciones</th></tr></thead>
+              <tbody id="tabla-equipos"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BITÁCORA -->
+    <div id="sec-bitacora" class="section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📝 Bitácora de Mantenimiento</span>
+          <button class="btn btn-primary" onclick="openModal('modal-bitacora')">+ Nuevo Registro</button>
+        </div>
+        <div class="card-body">
+          <div class="filters">
+            <select id="bit-equipo-sel" onchange="loadBitacora()"><option value="">— Todos los equipos —</option></select>
+            <select id="bit-tipo-sel" onchange="loadBitacora()">
+              <option value="">— Todos los tipos —</option>
+              <option value="PREVENTIVO">Preventivo</option>
+              <option value="CORRECTIVO">Correctivo</option>
+              <option value="LIMPIEZA">Limpieza</option>
+              <option value="RECARGA_REFRIGERANTE">Recarga Refrigerante</option>
+              <option value="REVISION">Revisión</option>
+              <option value="OTRO">Otro</option>
+            </select>
+            <input type="date" id="bit-desde" onchange="loadBitacora()" title="Desde">
+            <input type="date" id="bit-hasta" onchange="loadBitacora()" title="Hasta">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Fecha</th><th>Equipo</th><th>Tipo</th><th>Técnico</th><th>Descripción</th><th>Próximo Mant.</th><th>Costo</th><th></th></tr></thead>
+              <tbody id="tabla-bitacora"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSPECCIONES -->
+    <div id="sec-inspecciones" class="section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🔍 Inspecciones Técnicas</span>
+          <button class="btn btn-primary" onclick="openModal('modal-inspeccion')">+ Nueva Inspección</button>
+        </div>
+        <div class="card-body">
+          <div class="filters">
+            <select id="insp-equipo-sel" onchange="loadInspecciones()"><option value="">— Seleccionar equipo —</option></select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Fecha</th><th>Tipo</th><th>Inspector</th><th>Condición</th><th>Empresa</th><th>Costo</th><th>Próxima</th></tr></thead>
+              <tbody id="tabla-inspecciones"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERTAS -->
+    <div id="sec-alertas" class="section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🔔 Alertas de Mantenimiento</span>
+          <select id="alertas-estado-filter" onchange="loadAlertas()" style="font-size:13px;padding:6px 10px;border-radius:8px;border:1px solid var(--border);">
+            <option value="activa">Activas</option>
+            <option value="resuelta">Resueltas</option>
+          </select>
+        </div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Equipo</th><th>Tipo</th><th>Mensaje</th><th>Criticidad</th><th>Fecha</th><th>Acción</th></tr></thead>
+              <tbody id="tabla-alertas"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTES -->
+    <div id="sec-reportes" class="section">
+      <div class="card">
+        <div class="card-header"><span class="card-title">📄 Generar Reporte</span></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group"><label>Equipo</label><select id="rep-equipo-sel"><option value="">— Todos los equipos —</option></select></div>
+            <div class="form-group"><label>Tipo de Reporte</label>
+              <select id="rep-tipo">
+                <option value="inventario">Inventario General</option>
+                <option value="bitacora">Bitácora</option>
+                <option value="inspecciones">Inspecciones</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Título</label><input id="rep-titulo" placeholder="Reporte Mensual A/C FACH"></div>
+            <div class="form-group"><label>Email destino</label><input id="rep-email" type="email" placeholder="correo@fach.cl"></div>
+            <div class="form-group"><label>Período desde</label><input id="rep-inicio" type="date"></div>
+            <div class="form-group"><label>Período hasta</label><input id="rep-fin" type="date"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="generarReportePDF()">📥 Descargar PDF</button>
+            <button class="btn btn-outline" onclick="descargarHTML()">🌐 Descargar HTML</button>
+            <button class="btn btn-success" onclick="enviarReporteEmail()">📧 Enviar por Email</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIGURACIÓN -->
+    <div id="sec-configuracion" class="section">
+      <div class="card">
+        <div class="card-header"><span class="card-title">⚙️ Configuración del Sistema</span></div>
+        <div class="card-body">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(this,'tab-inst')">Institución</button>
+            <button class="tab-btn" onclick="switchTab(this,'tab-emailjs')">EmailJS</button>
+            <button class="tab-btn" onclick="switchTab(this,'tab-api')">API Worker</button>
+          </div>
+          <div id="tab-inst" class="tab-content active">
+            <div class="form-grid">
+              <div class="form-group"><label>Nombre Institución</label><input id="cfg-empresa" placeholder="FACH — Climatización & Energía"></div>
+              <div class="form-group"><label>Unidad</label><input id="cfg-unidad"></div>
+              <div class="form-group"><label>Responsable</label><input id="cfg-responsable"></div>
+              <div class="form-group"><label>Cargo</label><input id="cfg-cargo"></div>
+              <div class="form-group"><label>Email</label><input id="cfg-email" type="email"></div>
+              <div class="form-group"><label>Sitio web</label><input id="cfg-web"></div>
+            </div>
+          </div>
+          <div id="tab-emailjs" class="tab-content">
+            <div class="form-grid">
+              <div class="form-group"><label>Service ID</label><input id="cfg-ejs-service"></div>
+              <div class="form-group"><label>Template ID</label><input id="cfg-ejs-template"></div>
+              <div class="form-group full"><label>Public Key</label><input id="cfg-ejs-key"></div>
+            </div>
+          </div>
+          <div id="tab-api" class="tab-content">
+            <div class="form-group" style="margin-bottom:12px;">
+              <label>URL del Cloudflare Worker</label>
+              <input id="cfg-api-url" placeholder="https://portal-aacc-fach-api.vgarcesb.workers.dev">
+            </div>
+            <div id="api-status" style="padding:10px;background:#f1f5f9;border-radius:8px;font-size:13px;margin-bottom:12px;">No verificado</div>
+            <button class="btn btn-outline" onclick="testAPI()">🔌 Probar Conexión</button>
+          </div>
+          <div style="margin-top:20px;">
+            <button class="btn btn-primary" onclick="saveConfig()">💾 Guardar Configuración</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
-
-<!-- APP -->
-<div id="app">
-  <div class="layout">
-
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="app-icon">❄️</div>
-        <h2>Portal A/C FACH</h2>
-        <p>Climatización &amp; Energía</p>
-      </div>
-      <nav class="sidebar-nav">
-        <div class="nav-section">Principal</div>
-        <div class="nav-item active" onclick="showSection('dashboard')"><span class="icon">📊</span> Dashboard</div>
-        <div class="nav-section">Equipos</div>
-        <div class="nav-item" onclick="showSection('equipos')"><span class="icon">❄️</span> Inventario Equipos</div>
-        <div class="nav-item" onclick="showSection('bitacora')"><span class="icon">📝</span> Bitácora</div>
-        <div class="nav-item" onclick="showSection('inspecciones')"><span class="icon">🔍</span> Inspecciones</div>
-        <div class="nav-section">Alertas</div>
-        <div class="nav-item" onclick="showSection('alertas')"><span class="icon">🔔</span> Alertas <span id="badge-alertas" style="background:#dc2626;color:white;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:4px;display:none;"></span></div>
-        <div class="nav-section">Sistema</div>
-        <div class="nav-item" onclick="showSection('reportes')"><span class="icon">📄</span> Reportes</div>
-        <div class="nav-item" onclick="showSection('usuarios')"><span class="icon">👥</span> Usuarios</div>
-        <div class="nav-item" onclick="showSection('configuracion')"><span class="icon">⚙️</span> Configuración</div>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="user-info">
-          <div class="user-avatar" id="user-avatar">A</div>
-          <div>
-            <div id="user-name" style="font-weight:600;font-size:12px;">Administrador</div>
-            <div id="user-rol" style="font-size:10px;opacity:.7;">administrador</div>
-          </div>
-        </div>
-        <button class="btn-logout" onclick="doLogout()">🚪 Cerrar Sesión</button>
-      </div>
-    </aside>
-
-    <!-- MAIN -->
-    <div class="main">
-      <div class="topbar">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-          <h1 id="page-title">Dashboard</h1>
-        </div>
-        <div class="topbar-actions">
-          <span style="font-size:12px;color:var(--muted);" id="topbar-fecha"></span>
-        </div>
-      </div>
-
-      <!-- DASHBOARD -->
-      <div id="sec-dashboard" class="section active">
-        <div id="stat-grid" class="stat-grid"></div>
-        <div id="alertas-banner"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-          <div class="card">
-            <div class="card-header"><span class="card-title">📅 Próximos Mantenimientos</span></div>
-            <div class="card-body" id="dash-proximos"><div class="empty-state"><div class="empty-icon">📅</div><p>Cargando...</p></div></div>
-          </div>
-          <div class="card">
-            <div class="card-header"><span class="card-title">📝 Últimas Bitácoras</span></div>
-            <div class="card-body" id="dash-ultimas"><div class="empty-state"><div class="empty-icon">📝</div><p>Cargando...</p></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- EQUIPOS -->
-      <div id="sec-equipos" class="section">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">❄️ Inventario de Equipos A/C — FACH</span>
-            <button class="btn btn-primary" onclick="openModal('modal-equipo')">+ Nuevo Equipo</button>
-          </div>
-          <div class="card-body">
-            <div class="filters">
-              <input id="search-eq" placeholder="🔍 Buscar código, marca, ubicación..." oninput="filtrarEquipos()">
-              <select id="filter-cat" onchange="filtrarEquipos()">
-                <option value="">Todas las categorías</option>
-                <option value="MAYOR_40000_BTU">Mayor 40.000 BTU</option>
-                <option value="MENOR_40000_BTU">Menor 40.000 BTU</option>
-              </select>
-              <select id="filter-cond" onchange="filtrarEquipos()">
-                <option value="">Todas las condiciones</option>
-                <option value="ACTIVO">Activo</option>
-                <option value="FUERA_DE_SERVICIO">Fuera de Servicio</option>
-                <option value="EN_MANTENIMIENTO">En Mantenimiento</option>
-                <option value="POR_BAJA">Por Baja</option>
-              </select>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Código</th><th>Categoría</th><th>Tipo</th><th>HFC</th><th>Marca / Modelo</th><th>N° Serie</th><th>Ubicación</th><th>Condición</th><th>Acciones</th></tr></thead>
-                <tbody id="tabla-equipos"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- BITÁCORA -->
-      <div id="sec-bitacora" class="section">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">📝 Bitácora de Mantenimiento</span>
-            <button class="btn btn-primary" onclick="openModal('modal-bitacora')">+ Nuevo Registro</button>
-          </div>
-          <div class="card-body">
-            <div class="filters">
-              <select id="bit-equipo-sel" onchange="loadBitacora()">
-                <option value="">— Todos los equipos —</option>
-              </select>
-              <select id="bit-tipo-sel" onchange="loadBitacora()">
-                <option value="">— Todos los tipos —</option>
-                <option value="PREVENTIVO">Preventivo</option>
-                <option value="CORRECTIVO">Correctivo</option>
-                <option value="LIMPIEZA">Limpieza</option>
-                <option value="RECARGA_REFRIGERANTE">Recarga Refrigerante</option>
-                <option value="REVISION">Revisión</option>
-                <option value="OTRO">Otro</option>
-              </select>
-              <input type="date" id="bit-desde" onchange="loadBitacora()" title="Desde">
-              <input type="date" id="bit-hasta" onchange="loadBitacora()" title="Hasta">
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Fecha</th><th>Equipo</th><th>Tipo Servicio</th><th>Técnico</th><th>Descripción</th><th>Próximo Mant.</th><th>Costo</th><th>Acciones</th></tr></thead>
-                <tbody id="tabla-bitacora"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- INSPECCIONES -->
-      <div id="sec-inspecciones" class="section">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">🔍 Inspecciones Técnicas</span>
-            <button class="btn btn-primary" onclick="openModal('modal-inspeccion')">+ Nueva Inspección</button>
-          </div>
-          <div class="card-body">
-            <div class="filters">
-              <select id="insp-equipo-sel" onchange="loadInspecciones()">
-                <option value="">— Seleccionar equipo —</option>
-              </select>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Fecha</th><th>Tipo</th><th>Inspector</th><th>Condición</th><th>Empresa</th><th>Costo</th><th>Próxima</th></tr></thead>
-                <tbody id="tabla-inspecciones"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ALERTAS -->
-      <div id="sec-alertas" class="section">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">🔔 Alertas de Mantenimiento</span>
-            <div style="display:flex;gap:8px;">
-              <select id="alertas-estado-filter" onchange="loadAlertas()">
-                <option value="activa">Activas</option>
-                <option value="resuelta">Resueltas</option>
-              </select>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Equipo</th><th>Tipo</th><th>Mensaje</th><th>Criticidad</th><th>Fecha</th><th>Acción</th></tr></thead>
-                <tbody id="tabla-alertas"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- REPORTES -->
-      <div id="sec-reportes" class="section">
-        <div class="card" style="margin-bottom:20px;">
-          <div class="card-header"><span class="card-title">📄 Generar Reporte</span></div>
-          <div class="card-body">
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Equipo</label>
-                <select id="rep-equipo-sel">
-                  <option value="">— Todos los equipos —</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Tipo de Reporte</label>
-                <select id="rep-tipo">
-                  <option value="inventario">Inventario General</option>
-                  <option value="bitacora">Bitácora de Mantenimiento</option>
-                  <option value="inspecciones">Inspecciones Técnicas</option>
-                  <option value="alertas">Alertas y Vencimientos</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Título del Reporte</label>
-                <input id="rep-titulo" placeholder="Ej: Reporte Mensual A/C FACH">
-              </div>
-              <div class="form-group">
-                <label>Email destino</label>
-                <input id="rep-email" type="email" placeholder="correo@fach.cl">
-              </div>
-              <div class="form-group">
-                <label>Período desde</label>
-                <input id="rep-inicio" type="date">
-              </div>
-              <div class="form-group">
-                <label>Período hasta</label>
-                <input id="rep-fin" type="date">
-              </div>
-            </div>
-            <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
-              <button class="btn btn-primary" onclick="generarReportePDF()">📥 Descargar PDF</button>
-              <button class="btn btn-outline" onclick="descargarHTML()">🌐 Descargar HTML</button>
-              <button class="btn btn-success" onclick="enviarReporteEmail()">📧 Enviar por Email</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- USUARIOS -->
-      <div id="sec-usuarios" class="section">
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">👥 Usuarios del Sistema</span>
-            <button class="btn btn-primary" onclick="openModal('modal-usuario')">+ Nuevo Usuario</button>
-          </div>
-          <div class="card-body">
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th><th>Último Acceso</th></tr></thead>
-                <tbody id="tabla-usuarios"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CONFIGURACIÓN -->
-      <div id="sec-configuracion" class="section">
-        <div class="card">
-          <div class="card-header"><span class="card-title">⚙️ Configuración del Sistema</span></div>
-          <div class="card-body">
-            <div class="tabs">
-              <button class="tab-btn active" onclick="switchTab(this,'tab-inst')">Institución</button>
-              <button class="tab-btn" onclick="switchTab(this,'tab-emailjs')">EmailJS</button>
-              <button class="tab-btn" onclick="switchTab(this,'tab-api')">API Worker</button>
-            </div>
-            <div id="tab-inst" class="tab-content active">
-              <div class="form-grid">
-                <div class="form-group"><label>Nombre Institución</label><input id="cfg-empresa" placeholder="FACH — Climatización & Energía"></div>
-                <div class="form-group"><label>Unidad</label><input id="cfg-unidad" placeholder="Unidad de Mantenimiento"></div>
-                <div class="form-group"><label>Responsable</label><input id="cfg-responsable" placeholder="Victor Manuel Garces Borje"></div>
-                <div class="form-group"><label>Cargo</label><input id="cfg-cargo" placeholder="Técnico de Mantenimiento"></div>
-                <div class="form-group"><label>Email contacto</label><input id="cfg-email" type="email"></div>
-                <div class="form-group"><label>Sitio web</label><input id="cfg-web" placeholder="www.totis.cl"></div>
-              </div>
-            </div>
-            <div id="tab-emailjs" class="tab-content">
-              <div class="form-grid">
-                <div class="form-group"><label>Service ID</label><input id="cfg-ejs-service" placeholder="service_xxxxxxx"></div>
-                <div class="form-group"><label>Template ID</label><input id="cfg-ejs-template" placeholder="template_xxxxxxx"></div>
-                <div class="form-group full"><label>Public Key</label><input id="cfg-ejs-key" placeholder="xxxxxxxxxxxxxxxxxxxx"></div>
-              </div>
-            </div>
-            <div id="tab-api" class="tab-content">
-              <div class="form-group" style="margin-bottom:12px;">
-                <label>URL del Cloudflare Worker (API backend)</label>
-                <input id="cfg-api-url" placeholder="https://portal-aacc-fach-api.tu-usuario.workers.dev">
-              </div>
-              <div id="api-status" style="padding:10px;background:#f1f5f9;border-radius:8px;font-size:13px;margin-bottom:12px;">No verificado</div>
-              <button class="btn btn-outline" onclick="testAPI()">🔌 Probar Conexión</button>
-            </div>
-            <div style="margin-top:20px;">
-              <button class="btn btn-primary" onclick="saveConfig()">💾 Guardar Configuración</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /main -->
-  </div><!-- /layout -->
-</div><!-- /app -->
 
 <!-- MODAL: Nuevo Equipo -->
 <div class="modal-overlay" id="modal-equipo">
@@ -472,8 +347,8 @@ textarea{resize:vertical;min-height:80px;}
     <div class="modal-header"><h3>❄️ Nuevo Equipo A/C</h3><button class="btn-close" onclick="closeModal('modal-equipo')">✕</button></div>
     <div class="modal-body">
       <div class="form-grid">
-        <div class="form-group"><label>Código *</label><input id="eq-codigo" placeholder="MAYOR-13 o MENOR-18"></div>
-        <div class="form-group"><label>Número *</label><input id="eq-numero" type="number" placeholder="13"></div>
+        <div class="form-group"><label>Código *</label><input id="eq-codigo" placeholder="MAYOR-13"></div>
+        <div class="form-group"><label>Número *</label><input id="eq-numero" type="number"></div>
         <div class="form-group"><label>Categoría *</label>
           <select id="eq-categoria">
             <option value="MAYOR_40000_BTU">Mayor de 40.000 BTU</option>
@@ -488,7 +363,7 @@ textarea{resize:vertical;min-height:80px;}
             <option value="VENTANA">Ventana</option>
           </select>
         </div>
-        <div class="form-group"><label>HFC / Refrigerante *</label>
+        <div class="form-group"><label>HFC *</label>
           <select id="eq-hfc">
             <option value="R-410A">R-410A</option>
             <option value="R-22">R-22</option>
@@ -504,125 +379,22 @@ textarea{resize:vertical;min-height:80px;}
             <option value="POR_BAJA">Por Baja</option>
           </select>
         </div>
-        <div class="form-group"><label>Marca *</label><input id="eq-marca" placeholder="TRANE, YORK, CARRIER..."></div>
-        <div class="form-group"><label>Modelo *</label><input id="eq-modelo" placeholder="WSC060EDR0AN"></div>
-        <div class="form-group"><label>N° de Serie *</label><input id="eq-serie" placeholder="101510863L"></div>
+        <div class="form-group"><label>Marca *</label><input id="eq-marca" placeholder="TRANE"></div>
+        <div class="form-group"><label>Modelo *</label><input id="eq-modelo"></div>
+        <div class="form-group"><label>N° de Serie *</label><input id="eq-serie"></div>
         <div class="form-group"><label>Fecha Instalación</label><input id="eq-instalacion" type="date"></div>
         <div class="form-group full"><label>Ubicación *</label><input id="eq-ubicacion" placeholder="BIBLIOTECA NORTE EXTERIOR"></div>
         <div class="form-group"><label>Voltaje</label><input id="eq-voltaje" placeholder="220V"></div>
         <div class="form-group"><label>Amperaje</label><input id="eq-amperaje" placeholder="15A"></div>
-        <div class="form-group"><label>Potencia (kW)</label><input id="eq-potencia" placeholder="5.5 kW"></div>
-        <div class="form-group"><label>Capacidad BTU</label><input id="eq-btu" placeholder="60.000 BTU"></div>
-        <div class="form-group full"><label>Empresa Mantenimiento</label><input id="eq-empresa" placeholder="Empresa contratista"></div>
+        <div class="form-group"><label>Potencia (kW)</label><input id="eq-potencia"></div>
+        <div class="form-group"><label>Capacidad BTU</label><input id="eq-btu"></div>
+        <div class="form-group full"><label>Empresa Mantenimiento</label><input id="eq-empresa"></div>
         <div class="form-group full"><label>Observaciones</label><textarea id="eq-obs"></textarea></div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline" onclick="closeModal('modal-equipo')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveEquipo()">💾 Guardar Equipo</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Bitácora -->
-<div class="modal-overlay" id="modal-bitacora">
-  <div class="modal">
-    <div class="modal-header"><h3>📝 Nuevo Registro de Bitácora</h3><button class="btn-close" onclick="closeModal('modal-bitacora')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group full"><label>Equipo *</label>
-          <select id="bit-equipo-modal"><option value="">— Seleccionar equipo —</option></select>
-        </div>
-        <div class="form-group"><label>Fecha *</label><input id="bit-fecha" type="date"></div>
-        <div class="form-group"><label>Tipo de Servicio *</label>
-          <select id="bit-tipo">
-            <option value="PREVENTIVO">Preventivo</option>
-            <option value="CORRECTIVO">Correctivo</option>
-            <option value="LIMPIEZA">Limpieza</option>
-            <option value="RECARGA_REFRIGERANTE">Recarga Refrigerante</option>
-            <option value="REVISION">Revisión</option>
-            <option value="INSTALACION">Instalación</option>
-            <option value="PREDICTIVO">Predictivo</option>
-            <option value="OTRO">Otro</option>
-          </select>
-        </div>
-        <div class="form-group full"><label>Técnico *</label><input id="bit-tecnico" placeholder="Nombre del técnico responsable"></div>
-        <div class="form-group full"><label>Descripción del Trabajo *</label><textarea id="bit-desc" placeholder="Detalle las tareas realizadas..."></textarea></div>
-        <div class="form-group full"><label>Repuestos Utilizados</label><textarea id="bit-repuestos" placeholder="Filtros, refrigerante, correas..." style="min-height:60px;"></textarea></div>
-        <div class="form-group"><label>Costo (CLP)</label><input id="bit-costo" type="number" placeholder="0"></div>
-        <div class="form-group"><label>Próximo Mantenimiento</label><input id="bit-proximo" type="date"></div>
-        <div class="form-group full"><label>Observaciones</label><textarea id="bit-obs" style="min-height:60px;"></textarea></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-bitacora')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveBitacora()">💾 Guardar Registro</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Inspección -->
-<div class="modal-overlay" id="modal-inspeccion">
-  <div class="modal">
-    <div class="modal-header"><h3>🔍 Nueva Inspección Técnica</h3><button class="btn-close" onclick="closeModal('modal-inspeccion')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group full"><label>Equipo *</label>
-          <select id="insp-equipo-modal"><option value="">— Seleccionar equipo —</option></select>
-        </div>
-        <div class="form-group"><label>Fecha Inspección *</label><input id="insp-fecha" type="date"></div>
-        <div class="form-group"><label>Tipo Inspección</label>
-          <select id="insp-tipo">
-            <option value="VISUAL">Visual</option>
-            <option value="FUNCIONAL">Funcional</option>
-            <option value="PREVENTIVA">Preventiva</option>
-            <option value="CORRECTIVA">Correctiva</option>
-            <option value="ANUAL">Anual</option>
-          </select>
-        </div>
-        <div class="form-group"><label>Inspector</label><input id="insp-inspector" placeholder="Nombre del inspector"></div>
-        <div class="form-group"><label>Empresa Externa</label><input id="insp-empresa" placeholder="Empresa contratista (si aplica)"></div>
-        <div class="form-group"><label>Condición General</label>
-          <select id="insp-condicion">
-            <option value="BUENA">Buena</option>
-            <option value="REGULAR">Regular</option>
-            <option value="DEFICIENTE">Deficiente</option>
-            <option value="CRITICA">Crítica</option>
-          </select>
-        </div>
-        <div class="form-group"><label>Costo (CLP)</label><input id="insp-costo" type="number" placeholder="0"></div>
-        <div class="form-group"><label>Próxima Inspección</label><input id="insp-proxima" type="date"></div>
-        <div class="form-group full"><label>Resultado / Hallazgos</label><textarea id="insp-resultado" placeholder="Descripción del resultado de la inspección..."></textarea></div>
-        <div class="form-group full"><label>Recomendaciones</label><textarea id="insp-recomendaciones" placeholder="Acciones recomendadas..." style="min-height:60px;"></textarea></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-inspeccion')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveInspeccion()">💾 Guardar Inspección</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL: Usuario -->
-<div class="modal-overlay" id="modal-usuario">
-  <div class="modal" style="max-width:420px;">
-    <div class="modal-header"><h3>👤 Nuevo Usuario</h3><button class="btn-close" onclick="closeModal('modal-usuario')">✕</button></div>
-    <div class="modal-body">
-      <div class="form-group" style="margin-bottom:12px;"><label>Nombre *</label><input id="usr-nombre" placeholder="Nombre completo"></div>
-      <div class="form-group" style="margin-bottom:12px;"><label>Email *</label><input id="usr-email" type="email" placeholder="correo@fach.cl"></div>
-      <div class="form-group" style="margin-bottom:12px;"><label>Contraseña *</label><input id="usr-pass" type="password" placeholder="Contraseña"></div>
-      <div class="form-group"><label>Rol</label>
-        <select id="usr-rol">
-          <option value="operador">Operador</option>
-          <option value="tecnico">Técnico</option>
-          <option value="supervisor">Supervisor</option>
-          <option value="administrador">Administrador</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-usuario')">Cancelar</button>
-      <button class="btn btn-primary" onclick="saveUsuario()">💾 Crear Usuario</button>
+      <button class="btn btn-primary" onclick="saveEquipo()">💾 Guardar</button>
     </div>
   </div>
 </div>
@@ -634,30 +406,9 @@ textarea{resize:vertical;min-height:80px;}
     <div class="modal-body">
       <input type="hidden" id="edit-eq-id">
       <div class="form-grid">
-        <div class="form-group"><label>Tipo</label>
-          <select id="edit-eq-tipo">
-            <option value="COMPACTA">Compacta</option>
-            <option value="SPLIT/CIELO">Split Cielo</option>
-            <option value="SPLIT/PISO">Split Piso</option>
-            <option value="VENTANA">Ventana</option>
-          </select>
-        </div>
-        <div class="form-group"><label>HFC</label>
-          <select id="edit-eq-hfc">
-            <option value="R-410A">R-410A</option>
-            <option value="R-22">R-22</option>
-            <option value="R-407">R-407</option>
-            <option value="R-32">R-32</option>
-          </select>
-        </div>
-        <div class="form-group"><label>Condición</label>
-          <select id="edit-eq-condicion">
-            <option value="ACTIVO">Activo</option>
-            <option value="FUERA_DE_SERVICIO">Fuera de Servicio</option>
-            <option value="EN_MANTENIMIENTO">En Mantenimiento</option>
-            <option value="POR_BAJA">Por Baja</option>
-          </select>
-        </div>
+        <div class="form-group"><label>Tipo</label><select id="edit-eq-tipo"><option value="COMPACTA">Compacta</option><option value="SPLIT/CIELO">Split Cielo</option><option value="SPLIT/PISO">Split Piso</option><option value="VENTANA">Ventana</option></select></div>
+        <div class="form-group"><label>HFC</label><select id="edit-eq-hfc"><option value="R-410A">R-410A</option><option value="R-22">R-22</option><option value="R-407">R-407</option><option value="R-32">R-32</option></select></div>
+        <div class="form-group"><label>Condición</label><select id="edit-eq-condicion"><option value="ACTIVO">Activo</option><option value="FUERA_DE_SERVICIO">Fuera de Servicio</option><option value="EN_MANTENIMIENTO">En Mantenimiento</option><option value="POR_BAJA">Por Baja</option></select></div>
         <div class="form-group"><label>Marca</label><input id="edit-eq-marca"></div>
         <div class="form-group"><label>Modelo</label><input id="edit-eq-modelo"></div>
         <div class="form-group"><label>N° de Serie</label><input id="edit-eq-serie"></div>
@@ -677,19 +428,86 @@ textarea{resize:vertical;min-height:80px;}
   </div>
 </div>
 
+<!-- MODAL: Bitácora -->
+<div class="modal-overlay" id="modal-bitacora">
+  <div class="modal">
+    <div class="modal-header"><h3>📝 Nuevo Registro de Bitácora</h3><button class="btn-close" onclick="closeModal('modal-bitacora')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label>Equipo *</label><select id="bit-equipo-modal"><option value="">— Seleccionar equipo —</option></select></div>
+        <div class="form-group"><label>Fecha *</label><input id="bit-fecha" type="date"></div>
+        <div class="form-group"><label>Tipo de Servicio *</label>
+          <select id="bit-tipo">
+            <option value="PREVENTIVO">Preventivo</option>
+            <option value="CORRECTIVO">Correctivo</option>
+            <option value="LIMPIEZA">Limpieza</option>
+            <option value="RECARGA_REFRIGERANTE">Recarga Refrigerante</option>
+            <option value="REVISION">Revisión</option>
+            <option value="INSTALACION">Instalación</option>
+            <option value="PREDICTIVO">Predictivo</option>
+            <option value="OTRO">Otro</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>Técnico *</label><input id="bit-tecnico" placeholder="Nombre del técnico"></div>
+        <div class="form-group full"><label>Descripción del Trabajo *</label><textarea id="bit-desc"></textarea></div>
+        <div class="form-group full"><label>Repuestos Utilizados</label><textarea id="bit-repuestos" style="min-height:60px;"></textarea></div>
+        <div class="form-group"><label>Costo (CLP)</label><input id="bit-costo" type="number" placeholder="0"></div>
+        <div class="form-group"><label>Próximo Mantenimiento</label><input id="bit-proximo" type="date"></div>
+        <div class="form-group full"><label>Observaciones</label><textarea id="bit-obs" style="min-height:60px;"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-bitacora')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveBitacora()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Inspección -->
+<div class="modal-overlay" id="modal-inspeccion">
+  <div class="modal">
+    <div class="modal-header"><h3>🔍 Nueva Inspección</h3><button class="btn-close" onclick="closeModal('modal-inspeccion')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label>Equipo *</label><select id="insp-equipo-modal"><option value="">— Seleccionar —</option></select></div>
+        <div class="form-group"><label>Fecha *</label><input id="insp-fecha" type="date"></div>
+        <div class="form-group"><label>Tipo</label>
+          <select id="insp-tipo">
+            <option value="VISUAL">Visual</option>
+            <option value="FUNCIONAL">Funcional</option>
+            <option value="PREVENTIVA">Preventiva</option>
+            <option value="CORRECTIVA">Correctiva</option>
+            <option value="ANUAL">Anual</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Inspector</label><input id="insp-inspector"></div>
+        <div class="form-group"><label>Empresa Externa</label><input id="insp-empresa"></div>
+        <div class="form-group"><label>Condición General</label>
+          <select id="insp-condicion">
+            <option value="BUENA">Buena</option>
+            <option value="REGULAR">Regular</option>
+            <option value="DEFICIENTE">Deficiente</option>
+            <option value="CRITICA">Crítica</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Costo (CLP)</label><input id="insp-costo" type="number" placeholder="0"></div>
+        <div class="form-group"><label>Próxima Inspección</label><input id="insp-proxima" type="date"></div>
+        <div class="form-group full"><label>Resultado / Hallazgos</label><textarea id="insp-resultado"></textarea></div>
+        <div class="form-group full"><label>Recomendaciones</label><textarea id="insp-recomendaciones" style="min-height:60px;"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-inspeccion')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveInspeccion()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ============================================================
-// ESTADO GLOBAL
-// ============================================================
-let API_URL = localStorage.getItem('api_url') || '';
-let TOKEN = localStorage.getItem('token') || '';
+let API_URL = localStorage.getItem('api_url') || 'https://portal-aacc-fach-api.vgarcesb.workers.dev';
 let equiposCache = [];
 let configCache = {};
-let currentUser = null;
 
-// ============================================================
-// UTILIDADES
-// ============================================================
 function toast(msg, type='info') {
   const t = document.createElement('div');
   t.className = `toast ${type}`;
@@ -700,16 +518,13 @@ function toast(msg, type='info') {
 
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
 function switchTab(el, tabId) {
-  el.closest('.card-body, .modal-body, .section').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  el.closest('.card-body, .modal-body, .section').querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  el.closest('.card-body,.modal-body,.section').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.closest('.card-body,.modal-body,.section').querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.getElementById(tabId).classList.add('active');
-}
-
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
 }
 
 function badgeCondicion(c) {
@@ -727,22 +542,12 @@ function badgeCategoria(c) {
 function fmtDate(d) { return d ? d.substring(0,10) : '-'; }
 function fmtMoney(n) { return n != null ? '$ ' + Number(n).toLocaleString('es-CL') : '$ 0'; }
 
-// ============================================================
-// API
-// ============================================================
 async function api(path, method='GET', body=null) {
-  if (!API_URL) {
-    toast('Configure la URL del Worker en ⚙️ Configuración → API Worker', 'error');
-    return null;
-  }
+  if (!API_URL) { toast('Configure la URL del Worker en ⚙️ Configuración', 'error'); return null; }
   try {
-    const opts = {
-      method,
-      headers: { 'Content-Type':'application/json', Authorization:`Bearer ${TOKEN}` }
-    };
+    const opts = { method, headers: { 'Content-Type':'application/json' } };
     if (body) opts.body = JSON.stringify(body);
     const r = await fetch(API_URL + path, opts);
-    if (r.status === 401) { doLogout(); return null; }
     return await r.json();
   } catch(e) {
     toast('Error de conexión con el Worker', 'error');
@@ -750,80 +555,6 @@ async function api(path, method='GET', body=null) {
   }
 }
 
-// ============================================================
-// AUTH
-// ============================================================
-async function doLogin() {
-  const email = document.getElementById('login-email').value;
-  const pass = document.getElementById('login-pass').value;
-  const apiUrl = document.getElementById('cfg-api-url')?.value?.trim();
-
-  if (!API_URL && !apiUrl) {
-    // Modo demo sin backend
-    currentUser = { nombre: 'Demo', rol: 'administrador' };
-    TOKEN = 'demo';
-    initApp();
-    return;
-  }
-
-  if (apiUrl) { API_URL = apiUrl; localStorage.setItem('api_url', apiUrl); }
-
-  try {
-    const r = await fetch(API_URL + '/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password: pass })
-    });
-    const data = await r.json();
-    if (data.token) {
-      TOKEN = data.token;
-      currentUser = data.usuario;
-      localStorage.setItem('token', TOKEN);
-      initApp();
-    } else {
-      document.getElementById('login-error').style.display = 'block';
-      document.getElementById('login-error').textContent = data.error || 'Credenciales incorrectas';
-    }
-  } catch(e) {
-    document.getElementById('login-error').style.display = 'block';
-    document.getElementById('login-error').textContent = 'No se pudo conectar al Worker. Configure la URL en el campo de abajo.';
-  }
-}
-
-function doLogout() {
-  TOKEN = '';
-  localStorage.removeItem('token');
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-}
-
-function initApp() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  if (currentUser) {
-    document.getElementById('user-name').textContent = currentUser.nombre;
-    document.getElementById('user-rol').textContent = currentUser.rol;
-    document.getElementById('user-avatar').textContent = currentUser.nombre.charAt(0).toUpperCase();
-  }
-  document.getElementById('topbar-fecha').textContent = new Date().toLocaleDateString('es-CL', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  loadEquiposCache();
-  loadDashboard();
-  loadConfig();
-}
-
-// Intentar auto-login si hay token guardado
-if (TOKEN && API_URL) {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('topbar-fecha').textContent = new Date().toLocaleDateString('es-CL', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  loadEquiposCache();
-  loadDashboard();
-  loadConfig();
-}
-
-// ============================================================
-// NAVEGACIÓN
-// ============================================================
 const sectionTitles = {
   dashboard:'Dashboard — Portal A/C FACH',
   equipos:'Inventario de Equipos A/C',
@@ -831,7 +562,6 @@ const sectionTitles = {
   inspecciones:'Inspecciones Técnicas',
   alertas:'Alertas de Mantenimiento',
   reportes:'Reportes',
-  usuarios:'Usuarios del Sistema',
   configuracion:'Configuración'
 };
 
@@ -844,20 +574,22 @@ function showSection(id) {
   });
   document.getElementById('page-title').textContent = sectionTitles[id] || id;
   document.getElementById('sidebar').classList.remove('open');
-  const loaders = {
-    dashboard: loadDashboard, equipos: loadEquipos,
-    bitacora: loadBitacora, inspecciones: () => {},
-    alertas: loadAlertas, usuarios: loadUsuarios
-  };
+  const loaders = { dashboard:loadDashboard, equipos:loadEquipos, bitacora:loadBitacora, alertas:loadAlertas };
   if (loaders[id]) loaders[id]();
 }
 
-// ============================================================
-// CACHÉ DE EQUIPOS
-// ============================================================
+async function init() {
+  document.getElementById('topbar-fecha').textContent = new Date().toLocaleDateString('es-CL', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  document.getElementById('bit-fecha').value = new Date().toISOString().split('T')[0];
+  document.getElementById('insp-fecha').value = new Date().toISOString().split('T')[0];
+  await loadEquiposCache();
+  await loadDashboard();
+  await loadConfig();
+}
+
 async function loadEquiposCache() {
   const data = await api('/api/equipos');
-  if (data) {
+  if (data && !data.error) {
     equiposCache = data;
     populateEquipoSelects();
     updateAlertsBadge();
@@ -870,9 +602,9 @@ function populateEquipoSelects() {
     const sel = document.getElementById(id);
     if (!sel) return;
     const current = sel.value;
-    sel.innerHTML = sel.id === 'bit-equipo-sel' || sel.id === 'insp-equipo-sel' || sel.id === 'rep-equipo-sel'
-      ? '<option value="">— Todos los equipos —</option>'
-      : '<option value="">— Seleccionar equipo —</option>';
+    sel.innerHTML = ['bit-equipo-modal','insp-equipo-modal'].includes(id)
+      ? '<option value="">— Seleccionar equipo —</option>'
+      : '<option value="">— Todos los equipos —</option>';
     equiposCache.forEach(eq => {
       const opt = document.createElement('option');
       opt.value = eq.id;
@@ -887,17 +619,17 @@ async function updateAlertsBadge() {
   const data = await api('/api/proximos-mantenimientos?limite=50');
   if (!data) return;
   const hoy = new Date().toISOString().split('T')[0];
-  const total = (data.vencidos?.length||0) + data.proximos?.filter(p => {
+  const vencidos = data.vencidos?.length || 0;
+  const proximos7 = data.proximos?.filter(p => {
     const dias = Math.ceil((new Date(p.proximo_mantenimiento) - new Date()) / 86400000);
     return dias <= 7;
   }).length || 0;
+  const total = vencidos + proximos7;
   const badge = document.getElementById('badge-alertas');
   if (total > 0) { badge.textContent = total; badge.style.display = 'inline'; }
+  else badge.style.display = 'none';
 }
 
-// ============================================================
-// DASHBOARD
-// ============================================================
 async function loadDashboard() {
   const data = await api('/api/dashboard');
   const s = data?.resumen || {};
@@ -907,31 +639,27 @@ async function loadDashboard() {
     <div class="stat-card danger"><div class="stat-icon">🔴</div><div class="stat-value">${s.fuera_servicio||0}</div><div class="stat-label">Fuera de Servicio</div></div>
     <div class="stat-card warning"><div class="stat-icon">🔧</div><div class="stat-value">${s.en_mantenimiento||0}</div><div class="stat-label">En Mantenimiento</div></div>
     <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-value">${s.mayores||0} / ${s.menores||0}</div><div class="stat-label">Mayores / Menores BTU</div></div>
-    <div class="stat-card ${s.alertas_activas>0?'danger':''}"><div class="stat-icon">🔔</div><div class="stat-value">${s.alertas_activas||0}</div><div class="stat-label">Alertas Activas</div></div>
+    <div class="stat-card ${(s.alertas_activas||0)>0?'danger':''}"><div class="stat-icon">🔔</div><div class="stat-value">${s.alertas_activas||0}</div><div class="stat-label">Alertas Activas</div></div>
   `;
   const proximos = data?.proximos_mantenimientos || [];
   document.getElementById('dash-proximos').innerHTML = proximos.length
     ? proximos.map(p => `<div style="padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:13px;">
         <strong>${p.codigo}</strong> — ${p.ubicacion}<br>
-        <span style="color:var(--muted);">📅 ${fmtDate(p.proximo_mantenimiento)} · Técnico: ${p.tecnico||'-'}</span>
+        <span style="color:var(--muted);">📅 ${fmtDate(p.proximo_mantenimiento)} · ${p.tecnico||'-'}</span>
       </div>`).join('')
     : '<div class="empty-state"><div class="empty-icon">📅</div><p>Sin mantenimientos próximos</p></div>';
-
   const ultimas = data?.ultimas_bitacoras || [];
   document.getElementById('dash-ultimas').innerHTML = ultimas.length
     ? ultimas.map(b => `<div style="padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:13px;">
-        <strong>${b.codigo}</strong> — ${b.tipo_servicio}<br>
+        <strong>${b.codigo||''}</strong> — ${b.tipo_servicio}<br>
         <span style="color:var(--muted);">📅 ${fmtDate(b.fecha)} · ${b.tecnico}</span>
       </div>`).join('')
     : '<div class="empty-state"><div class="empty-icon">📝</div><p>Sin registros en bitácora</p></div>';
 }
 
-// ============================================================
-// EQUIPOS
-// ============================================================
 async function loadEquipos() {
   const data = await api('/api/equipos');
-  if (data) { equiposCache = data; populateEquipoSelects(); }
+  if (data && !data.error) { equiposCache = data; populateEquipoSelects(); }
   renderEquipos(equiposCache);
 }
 
@@ -947,11 +675,11 @@ function renderEquipos(data) {
         <td>${eq.ubicacion}</td>
         <td>${badgeCondicion(eq.condicion)}</td>
         <td>
-          <button class="btn btn-outline btn-sm" onclick="abrirEditEquipo(${eq.id})" title="Editar">✏️</button>
-          <button class="btn btn-primary btn-sm" onclick="abrirBitacoraEquipo(${eq.id})" title="Ver bitácora">📝</button>
+          <button class="btn btn-outline btn-sm" onclick="abrirEditEquipo(${eq.id})">✏️</button>
+          <button class="btn btn-primary btn-sm" onclick="abrirBitacoraEquipo(${eq.id})">📝</button>
         </td>
       </tr>`).join('')
-    : '<tr><td colspan="9" style="text-align:center;padding:32px;color:#94a3b8;">Sin equipos registrados</td></tr>';
+    : '<tr><td colspan="9" style="text-align:center;padding:32px;color:#94a3b8;">Sin equipos</td></tr>';
 }
 
 function filtrarEquipos() {
@@ -961,16 +689,13 @@ function filtrarEquipos() {
   renderEquipos(equiposCache.filter(eq =>
     (!q || eq.codigo.toLowerCase().includes(q) || eq.marca.toLowerCase().includes(q) ||
      eq.ubicacion.toLowerCase().includes(q) || eq.numero_serie.toLowerCase().includes(q)) &&
-    (!cat || eq.categoria === cat) &&
-    (!cond || eq.condicion === cond)
+    (!cat || eq.categoria === cat) && (!cond || eq.condicion === cond)
   ));
 }
 
 async function saveEquipo() {
   const data = {
     codigo: document.getElementById('eq-codigo').value.trim().toUpperCase(),
-    numero_equipo: document.getElementById('eq-numero').value,
-    nombre_equipo: document.getElementById('eq-codigo').value,
     numero: parseInt(document.getElementById('eq-numero').value),
     categoria: document.getElementById('eq-categoria').value,
     tipo: document.getElementById('eq-tipo').value,
@@ -992,10 +717,10 @@ async function saveEquipo() {
   const res = await api('/api/equipos', 'POST', data);
   if (res?.id) {
     closeModal('modal-equipo');
-    toast('Equipo registrado correctamente', 'success');
+    toast('Equipo registrado', 'success');
     await loadEquiposCache();
     loadEquipos();
-  } else { toast(res?.error || 'Error al guardar equipo', 'error'); }
+  } else { toast(res?.error || 'Error al guardar', 'error'); }
 }
 
 async function abrirEditEquipo(id) {
@@ -1048,15 +773,11 @@ function abrirBitacoraEquipo(id) {
   loadBitacora();
 }
 
-// ============================================================
-// BITÁCORA
-// ============================================================
 async function loadBitacora() {
   const equipoId = document.getElementById('bit-equipo-sel').value;
   const tipo = document.getElementById('bit-tipo-sel').value;
   const desde = document.getElementById('bit-desde').value;
   const hasta = document.getElementById('bit-hasta').value;
-
   let url;
   if (equipoId) {
     url = `/api/equipos/${equipoId}/bitacora`;
@@ -1066,33 +787,28 @@ async function loadBitacora() {
     if (params.length) url += '?' + params.join('&');
   } else {
     url = '/api/bitacora';
-    const params = [];
-    if (tipo) params.push('tipo=' + tipo);
-    if (params.length) url += '?' + params.join('&');
+    if (tipo) url += '?tipo=' + tipo;
   }
-
   const data = await api(url) || [];
-  document.getElementById('tabla-bitacora').innerHTML = data.length
+  const hoy = new Date().toISOString().split('T')[0];
+  document.getElementById('tabla-bitacora').innerHTML = Array.isArray(data) && data.length
     ? data.map(b => `<tr>
         <td>${fmtDate(b.fecha)}</td>
         <td><strong>${b.codigo||''}</strong><br><small style="color:var(--muted);">${b.ubicacion||''}</small></td>
         <td><span class="badge badge-info">${b.tipo_servicio}</span></td>
         <td>${b.tecnico}</td>
-        <td style="max-width:200px;font-size:12px;">${(b.descripcion_trabajo||'').substring(0,80)}${b.descripcion_trabajo?.length>80?'...':''}</td>
-        <td style="color:${b.proximo_mantenimiento&&b.proximo_mantenimiento<new Date().toISOString().split('T')[0]?'var(--danger)':'var(--success)'};">${fmtDate(b.proximo_mantenimiento)}</td>
+        <td style="max-width:200px;font-size:12px;">${(b.descripcion_trabajo||'').substring(0,80)}${(b.descripcion_trabajo||'').length>80?'...':''}</td>
+        <td style="color:${b.proximo_mantenimiento&&b.proximo_mantenimiento<hoy?'var(--danger)':'var(--success)'};">${fmtDate(b.proximo_mantenimiento)}</td>
         <td>${fmtMoney(b.costo)}</td>
-        <td>
-          <button class="btn btn-danger btn-sm" onclick="deleteBitacora(${b.id})">🗑️</button>
-        </td>
+        <td><button class="btn btn-danger btn-sm" onclick="deleteBitacora(${b.id})">🗑️</button></td>
       </tr>`).join('')
-    : '<tr><td colspan="8" style="text-align:center;padding:32px;color:#94a3b8;">Sin registros en bitácora</td></tr>';
+    : '<tr><td colspan="8" style="text-align:center;padding:32px;color:#94a3b8;">Sin registros</td></tr>';
 }
 
 async function saveBitacora() {
-  const today = new Date().toISOString().split('T')[0];
   const data = {
     equipo_id: parseInt(document.getElementById('bit-equipo-modal').value),
-    fecha: document.getElementById('bit-fecha').value || today,
+    fecha: document.getElementById('bit-fecha').value,
     tecnico: document.getElementById('bit-tecnico').value,
     tipo_servicio: document.getElementById('bit-tipo').value,
     descripcion_trabajo: document.getElementById('bit-desc').value,
@@ -1107,80 +823,67 @@ async function saveBitacora() {
   const res = await api('/api/bitacora', 'POST', data);
   if (res?.id) {
     closeModal('modal-bitacora');
-    // Limpiar form
-    ['bit-tecnico','bit-desc','bit-repuestos','bit-costo','bit-proximo','bit-obs'].forEach(id => {
-      document.getElementById(id).value = '';
-    });
-    toast('Registro guardado correctamente', 'success');
+    ['bit-tecnico','bit-desc','bit-repuestos','bit-costo','bit-proximo','bit-obs'].forEach(id => { document.getElementById(id).value = ''; });
+    toast('Registro guardado', 'success');
     loadBitacora();
     updateAlertsBadge();
   } else { toast(res?.error || 'Error al guardar', 'error'); }
 }
 
 async function deleteBitacora(id) {
-  if (!confirm('¿Eliminar este registro de bitácora?')) return;
+  if (!confirm('¿Eliminar este registro?')) return;
   await api(`/api/bitacora/${id}`, 'DELETE');
   toast('Registro eliminado', 'success');
   loadBitacora();
 }
 
-// ============================================================
-// ALERTAS
-// ============================================================
 async function loadAlertas() {
   const estado = document.getElementById('alertas-estado-filter').value;
   const data = await api(`/api/alertas?estado=${estado}`) || [];
   const prox = await api('/api/proximos-mantenimientos?limite=50');
-
   const hoy = new Date().toISOString().split('T')[0];
   const vencidos = prox?.vencidos || [];
   const proximos30 = prox?.proximos?.filter(p => {
     const dias = Math.ceil((new Date(p.proximo_mantenimiento) - new Date()) / 86400000);
     return dias <= 30;
   }) || [];
-
   let rows = '';
-
-  // Vencidos
   vencidos.forEach(v => {
     const dias = Math.ceil((new Date() - new Date(v.proximo_mantenimiento)) / 86400000);
     rows += `<tr>
       <td><strong>${v.codigo}</strong><br><small>${v.ubicacion}</small></td>
-      <td><span class="badge badge-danger">Mantenimiento Vencido</span></td>
+      <td><span class="badge badge-danger">Vencido</span></td>
       <td>Mantenimiento vencido hace ${dias} día(s)</td>
       <td><span class="badge badge-danger">Alta</span></td>
       <td>${fmtDate(v.proximo_mantenimiento)}</td>
       <td><button class="btn btn-primary btn-sm" onclick="abrirBitacoraEquipo(${v.equipo_id})">Registrar</button></td>
     </tr>`;
   });
-
-  // Próximos 30 días
   proximos30.forEach(p => {
     const dias = Math.ceil((new Date(p.proximo_mantenimiento) - new Date()) / 86400000);
     rows += `<tr>
       <td><strong>${p.codigo}</strong><br><small>${p.ubicacion}</small></td>
-      <td><span class="badge badge-warning">Próximo Mantenimiento</span></td>
-      <td>Mantenimiento en ${dias} día(s) — Técnico: ${p.tecnico}</td>
+      <td><span class="badge badge-warning">Próximo</span></td>
+      <td>Mantenimiento en ${dias} día(s) — ${p.tecnico}</td>
       <td><span class="badge badge-${dias<=7?'danger':'warning'}">${dias<=7?'Alta':'Media'}</span></td>
       <td>${fmtDate(p.proximo_mantenimiento)}</td>
-      <td><button class="btn btn-outline btn-sm" onclick="abrirBitacoraEquipo(${p.equipo_id})">Ver Equipo</button></td>
+      <td><button class="btn btn-outline btn-sm" onclick="abrirBitacoraEquipo(${p.equipo_id})">Ver</button></td>
     </tr>`;
   });
-
-  // Alertas del sistema
-  data.forEach(a => {
-    rows += `<tr>
-      <td><strong>${a.codigo||'-'}</strong><br><small>${a.ubicacion||''}</small></td>
-      <td><span class="badge badge-warning">${a.tipo}</span></td>
-      <td>${a.mensaje}</td>
-      <td><span class="badge badge-${a.criticidad==='alta'?'danger':a.criticidad==='media'?'warning':'gray'}">${a.criticidad}</span></td>
-      <td>${fmtDate(a.fecha_alerta)}</td>
-      <td><button class="btn btn-success btn-sm" onclick="resolverAlerta(${a.id})">✓ Resolver</button></td>
-    </tr>`;
-  });
-
+  if (Array.isArray(data)) {
+    data.forEach(a => {
+      rows += `<tr>
+        <td><strong>${a.codigo||'-'}</strong></td>
+        <td><span class="badge badge-warning">${a.tipo}</span></td>
+        <td>${a.mensaje}</td>
+        <td><span class="badge badge-${a.criticidad==='alta'?'danger':'warning'}">${a.criticidad}</span></td>
+        <td>${fmtDate(a.fecha_alerta)}</td>
+        <td><button class="btn btn-success btn-sm" onclick="resolverAlerta(${a.id})">✓</button></td>
+      </tr>`;
+    });
+  }
   document.getElementById('tabla-alertas').innerHTML = rows ||
-    '<tr><td colspan="6" style="text-align:center;padding:32px;color:#94a3b8;">Sin alertas activas ✅</td></tr>';
+    '<tr><td colspan="6" style="text-align:center;padding:32px;color:#94a3b8;">Sin alertas ✅</td></tr>';
 }
 
 async function resolverAlerta(id) {
@@ -1190,15 +893,12 @@ async function resolverAlerta(id) {
   updateAlertsBadge();
 }
 
-// ============================================================
-// INSPECCIONES
-// ============================================================
 async function loadInspecciones() {
   const id = document.getElementById('insp-equipo-sel').value;
   if (!id) { document.getElementById('tabla-inspecciones').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94a3b8;">Seleccione un equipo</td></tr>'; return; }
   const data = await api(`/api/equipos/${id}/inspecciones`) || [];
   const condMap = { BUENA:'success', REGULAR:'warning', DEFICIENTE:'danger', CRITICA:'danger' };
-  document.getElementById('tabla-inspecciones').innerHTML = data.length
+  document.getElementById('tabla-inspecciones').innerHTML = Array.isArray(data) && data.length
     ? data.map(i => `<tr>
         <td>${fmtDate(i.fecha_inspeccion)}</td>
         <td>${i.tipo_inspeccion}</td>
@@ -1208,7 +908,7 @@ async function loadInspecciones() {
         <td>${fmtMoney(i.costo)}</td>
         <td>${fmtDate(i.proxima_inspeccion)}</td>
       </tr>`).join('')
-    : '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94a3b8;">Sin inspecciones registradas</td></tr>';
+    : '<tr><td colspan="7" style="text-align:center;padding:32px;color:#94a3b8;">Sin inspecciones</td></tr>';
 }
 
 async function saveInspeccion() {
@@ -1234,9 +934,6 @@ async function saveInspeccion() {
   } else { toast(res?.error || 'Error al guardar', 'error'); }
 }
 
-// ============================================================
-// REPORTES PDF
-// ============================================================
 async function generarReportePDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
@@ -1246,10 +943,8 @@ async function generarReportePDF() {
   const cargo = cfg.responsable_cargo || 'Técnico de Mantenimiento';
   const web = cfg.sitio_web || 'www.totis.cl';
   const titulo = document.getElementById('rep-titulo').value || 'Inventario A/C FACH';
-
-  // Header
-  doc.setFillColor(0, 51, 102);
-  doc.rect(0, 0, 210, 36, 'F');
+  doc.setFillColor(0,51,102);
+  doc.rect(0,0,210,36,'F');
   doc.setTextColor(255,255,255);
   doc.setFontSize(18);
   doc.setFont('helvetica','bold');
@@ -1259,41 +954,26 @@ async function generarReportePDF() {
   doc.text('Climatización & Energía — ' + institucion, 105, 23, { align:'center' });
   doc.setFontSize(9);
   doc.text(titulo, 105, 31, { align:'center' });
-
   doc.setTextColor(0,0,0);
   doc.setFontSize(9);
   doc.text('Fecha: ' + new Date().toLocaleDateString('es-CL'), 15, 45);
   doc.text('Generado por: ' + responsable, 105, 45);
-
-  let y = 55;
-
-  // Tabla de equipos
   const equipoId = document.getElementById('rep-equipo-sel').value;
   const lista = equipoId ? equiposCache.filter(e => e.id == equipoId) : equiposCache;
-
   if (lista.length > 0) {
     doc.setFontSize(12);
     doc.setFont('helvetica','bold');
     doc.setTextColor(0,51,102);
-    doc.text('INVENTARIO DE EQUIPOS A/C', 15, y);
-    y += 6;
+    doc.text('INVENTARIO DE EQUIPOS A/C', 15, 55);
     doc.autoTable({
-      startY: y,
+      startY: 60,
       head: [['Código','Categoría','Tipo','HFC','Marca','Modelo','Ubicación','Condición']],
-      body: lista.map(e => [
-        e.codigo,
-        e.categoria === 'MAYOR_40000_BTU' ? 'Mayor 40K BTU' : 'Menor 40K BTU',
-        e.tipo, e.hfc, e.marca, e.modelo,
-        e.ubicacion, e.condicion
-      ]),
+      body: lista.map(e => [e.codigo, e.categoria==='MAYOR_40000_BTU'?'Mayor 40K BTU':'Menor 40K BTU', e.tipo, e.hfc, e.marca, e.modelo, e.ubicacion, e.condicion]),
       theme:'striped',
       headStyles:{ fillColor:[0,80,160] },
       styles:{ fontSize:8 },
     });
-    y = doc.lastAutoTable.finalY + 10;
   }
-
-  // Footer
   const pageCount = doc.internal.getNumberOfPages();
   for(let i=1;i<=pageCount;i++) {
     doc.setPage(i);
@@ -1304,9 +984,7 @@ async function generarReportePDF() {
     doc.text(`${responsable} | ${cargo} | ${new Date().getFullYear()} | ${web}`, 105, 291, { align:'center' });
     doc.text(`Página ${i} de ${pageCount}`, 195, 291, { align:'right' });
   }
-
-  const filename = titulo.replace(/[^a-z0-9]/gi,'_') + '_' + new Date().toISOString().split('T')[0] + '.pdf';
-  doc.save(filename);
+  doc.save(titulo.replace(/[^a-z0-9]/gi,'_') + '_' + new Date().toISOString().split('T')[0] + '.pdf');
   toast('PDF descargado', 'success');
 }
 
@@ -1315,23 +993,18 @@ async function descargarHTML() {
   const titulo = document.getElementById('rep-titulo').value || 'Inventario A/C FACH';
   const equipoId = document.getElementById('rep-equipo-sel').value;
   const lista = equipoId ? equiposCache.filter(e => e.id == equipoId) : equiposCache;
-  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
-<title>${titulo}</title>
-<style>body{font-family:Arial,sans-serif;margin:40px;color:#1e293b;}h1{color:#003366;border-bottom:3px solid #0050a0;padding-bottom:8px;}table{width:100%;border-collapse:collapse;margin-top:12px;}th{background:#003366;color:white;padding:8px 12px;text-align:left;font-size:12px;}td{padding:8px 12px;border-bottom:1px solid #e2e8f0;font-size:12px;}tr:nth-child(even)td{background:#f8fafc;}.header{background:#003366;color:white;padding:20px;border-radius:8px;margin-bottom:24px;}.footer{margin-top:40px;padding:16px;background:#003366;color:white;text-align:center;border-radius:8px;font-size:12px;}@media print{body{margin:20px;}}</style></head><body>
-<div class="header"><h1 style="color:white;border:none;">❄️ ${titulo}</h1>
-<p>${cfg.institucion_nombre||'FACH'} | Fecha: ${new Date().toLocaleDateString('es-CL')}</p></div>
-<h2>Equipos de Aire Acondicionado (${lista.length} registros)</h2>
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${titulo}</title>
+<style>body{font-family:Arial,sans-serif;margin:40px;}h1{color:#003366;}table{width:100%;border-collapse:collapse;}th{background:#003366;color:white;padding:8px;}td{padding:8px;border-bottom:1px solid #e2e8f0;}tr:nth-child(even)td{background:#f8fafc;}.footer{margin-top:40px;background:#003366;color:white;padding:16px;text-align:center;}</style></head><body>
+<h1>❄️ ${titulo}</h1><p>${cfg.institucion_nombre||'FACH'} | ${new Date().toLocaleDateString('es-CL')}</p>
 <table><tr><th>Código</th><th>Categoría</th><th>Tipo</th><th>HFC</th><th>Marca</th><th>Modelo</th><th>N° Serie</th><th>Ubicación</th><th>Condición</th></tr>
 ${lista.map(e=>`<tr><td>${e.codigo}</td><td>${e.categoria}</td><td>${e.tipo}</td><td>${e.hfc}</td><td>${e.marca}</td><td>${e.modelo}</td><td>${e.numero_serie}</td><td>${e.ubicacion}</td><td>${e.condicion}</td></tr>`).join('')}
-</table>
-<div class="footer">${cfg.responsable_nombre||'Victor Manuel Garces Borje'} | ${cfg.responsable_cargo||'Técnico de Mantenimiento'} | ${cfg.sitio_web||'www.totis.cl'}</div>
-</body></html>`;
+</table><div class="footer">${cfg.responsable_nombre||'Victor Manuel Garces Borje'} | ${cfg.sitio_web||'www.totis.cl'}</div></body></html>`;
   const blob = new Blob([html],{type:'text/html;charset=utf-8'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = titulo.replace(/[^a-z0-9]/gi,'_') + '.html'; a.click();
   URL.revokeObjectURL(url);
-  toast('Reporte HTML descargado', 'success');
+  toast('HTML descargado', 'success');
 }
 
 async function enviarReporteEmail() {
@@ -1347,60 +1020,27 @@ async function enviarReporteEmail() {
     await emailjs.send(serviceId, templateId, {
       to_email: emailTo,
       subject: document.getElementById('rep-titulo').value || 'Reporte A/C FACH',
-      empresa: cfg.institucion_nombre || 'FACH Climatización & Energía',
+      empresa: cfg.institucion_nombre || 'FACH',
       responsable: cfg.responsable_nombre || 'Victor Manuel Garces Borje',
       fecha: new Date().toLocaleDateString('es-CL'),
       total_equipos: equiposCache.length,
       activos: equiposCache.filter(e=>e.condicion==='ACTIVO').length,
-      fuera_servicio: equiposCache.filter(e=>e.condicion==='FUERA_DE_SERVICIO').length,
       web: cfg.sitio_web || 'www.totis.cl',
-      message: `Reporte del inventario de equipos A/C FACH generado el ${new Date().toLocaleDateString('es-CL')}.`,
+      message: `Reporte A/C FACH — ${new Date().toLocaleDateString('es-CL')}`,
     });
-    toast('Reporte enviado por email ✅', 'success');
+    toast('Email enviado ✅', 'success');
   } catch(e) { toast('Error al enviar: ' + (e.text||e), 'error'); }
 }
 
-// ============================================================
-// USUARIOS
-// ============================================================
-async function loadUsuarios() {
-  const data = await api('/api/usuarios') || [];
-  document.getElementById('tabla-usuarios').innerHTML = data.length
-    ? data.map(u => `<tr>
-        <td>${u.nombre}</td>
-        <td>${u.email}</td>
-        <td><span class="badge badge-info">${u.rol}</span></td>
-        <td>${u.activo ? '<span class="badge badge-success">Activo</span>' : '<span class="badge badge-danger">Inactivo</span>'}</td>
-        <td>${fmtDate(u.ultimo_acceso)}</td>
-      </tr>`).join('')
-    : '<tr><td colspan="5" style="text-align:center;padding:32px;color:#94a3b8;">Sin usuarios</td></tr>';
-}
-
-async function saveUsuario() {
-  const data = {
-    nombre: document.getElementById('usr-nombre').value,
-    email: document.getElementById('usr-email').value,
-    password: document.getElementById('usr-pass').value,
-    rol: document.getElementById('usr-rol').value,
-  };
-  if (!data.nombre||!data.email||!data.password) { toast('Todos los campos son requeridos', 'error'); return; }
-  const res = await api('/api/usuarios', 'POST', data);
-  if (res?.id) { closeModal('modal-usuario'); toast('Usuario creado', 'success'); loadUsuarios(); }
-  else { toast(res?.error||'Error al crear usuario', 'error'); }
-}
-
-// ============================================================
-// CONFIGURACIÓN
-// ============================================================
 async function loadConfig() {
   const data = await api('/api/configuracion');
-  if (data) {
+  if (data && !data.error) {
     configCache = data;
     const map = {
-      'institucion_nombre':'cfg-empresa', 'institucion_unidad':'cfg-unidad',
-      'responsable_nombre':'cfg-responsable', 'responsable_cargo':'cfg-cargo',
-      'empresa_email':'cfg-email', 'sitio_web':'cfg-web',
-      'emailjs_service_id':'cfg-ejs-service', 'emailjs_template_id':'cfg-ejs-template',
+      'institucion_nombre':'cfg-empresa','institucion_unidad':'cfg-unidad',
+      'responsable_nombre':'cfg-responsable','responsable_cargo':'cfg-cargo',
+      'empresa_email':'cfg-email','sitio_web':'cfg-web',
+      'emailjs_service_id':'cfg-ejs-service','emailjs_template_id':'cfg-ejs-template',
       'emailjs_public_key':'cfg-ejs-key',
     };
     Object.entries(map).forEach(([k,v]) => {
@@ -1444,24 +1084,16 @@ async function testAPI() {
     API_URL = url; localStorage.setItem('api_url', url);
     toast('Conexión exitosa', 'success');
   } catch(e) {
-    document.getElementById('api-status').innerHTML = `<span style="color:#dc2626;">❌ Error de conexión al Worker</span>`;
+    document.getElementById('api-status').innerHTML = `<span style="color:#dc2626;">❌ Error de conexión</span>`;
     toast('No se pudo conectar', 'error');
   }
 }
 
-// Cerrar modales al hacer click fuera
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', e => { if(e.target===overlay) overlay.classList.remove('open'); });
 });
 
-// Fecha por defecto en modales
-document.addEventListener('DOMContentLoaded', () => {
-  const hoy = new Date().toISOString().split('T')[0];
-  ['bit-fecha','insp-fecha'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = hoy;
-  });
-});
+init();
 </script>
 </body>
 </html>
